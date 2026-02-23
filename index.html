@@ -3,1914 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TruMould — On-Demand Custom Manufacturing</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>tru mould — India/Asia On-Demand Custom Manufacturing Platform</title>
+<meta name="description" content="India's leading on-demand manufacturing platform. Instant quotes for injection molding, CNC machining, 3D printing. 20-day express molds, 97.8% on-time delivery.">
+<link rel="canonical" href="https://trumould.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --coal: #0a0a0a;
-    --graphite: #1a1a1a;
-    --steel: #2a2a2a;
-    --iron: #3a3a3a;
-    --silver: #8a8a8a;
-    --fog: #c5c5c5;
-    --white: #f0f0f0;
-    --bright: #ffffff;
-    --accent: #00d4aa;
-    --accent-dim: #00b892;
-    --accent-glow: rgba(0, 212, 170, 0.15);
-    --accent-warm: #ff6b35;
-    --font-body: 'DM Sans', sans-serif;
-    --font-mono: 'Space Mono', monospace;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: var(--font-body);
-    background: var(--coal);
-    color: var(--white);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ===== NOISE OVERLAY ===== */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* ===== NAVIGATION ===== */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    padding: 20px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.4s ease, backdrop-filter 0.4s ease;
-  }
-
-  nav.scrolled {
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-
-  .nav-logo {
-    font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--bright);
-    text-decoration: none;
-  }
-
-  .nav-logo span { color: var(--accent); }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--fog);
-    text-decoration: none;
-    letter-spacing: 0.3px;
-    transition: color 0.3s;
-  }
-
-  .nav-links a:hover { color: var(--bright); }
-
-  .nav-cta {
-    font-family: var(--font-mono) !important;
-    font-size: 13px !important;
-    background: var(--accent) !important;
-    color: var(--coal) !important;
-    padding: 10px 24px;
-    border-radius: 6px;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px;
-    transition: all 0.3s;
-  }
-
-  .nav-cta:hover {
-    background: var(--bright) !important;
-    transform: translateY(-1px);
-  }
-
-  .mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-  }
-
-  .mobile-menu-btn span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--white);
-    margin: 5px 0;
-    transition: 0.3s;
-  }
-
-  /* ===== HERO ===== */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 120px 48px 80px;
-  }
-
-  .hero-bg {
-    position: absolute;
-    top: 0; right: -10%;
-    width: 65%;
-    height: 100%;
-    background: radial-gradient(ellipse at 60% 40%, rgba(0, 212, 170, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 70%, rgba(0, 212, 170, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  /* Grid lines */
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 48px; right: 48px; bottom: 0;
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 80px 80px;
-    pointer-events: none;
-  }
-
-  .hero-content {
-    max-width: 720px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    width: 32px;
-    height: 1px;
-    background: var(--accent);
-  }
-
-  .hero h1 {
-    font-size: clamp(42px, 5.5vw, 72px);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -2px;
-    margin-bottom: 28px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
-
-  .hero h1 .highlight {
-    background: linear-gradient(135deg, var(--accent), #00f5c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 18px;
-    line-height: 1.7;
-    color: var(--silver);
-    max-width: 520px;
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
-  }
-
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-
-  .btn-primary {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    background: var(--accent);
-    color: var(--coal);
-    padding: 16px 36px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: all 0.3s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .btn-primary:hover {
-    background: var(--bright);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 212, 170, 0.2);
-  }
-
-  .btn-secondary {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--fog);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.3s;
-  }
-
-  .btn-secondary:hover { color: var(--bright); }
-
-  .btn-secondary svg { transition: transform 0.3s; }
-  .btn-secondary:hover svg { transform: translateX(3px); }
-
-  /* Hero stats bar */
-  .hero-stats {
-    display: flex;
-    gap: 48px;
-    margin-top: 72px;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    opacity: 0;
-    animation: fadeUp 0.8s 1s forwards;
-  }
-
-  .hero-stat h3 {
-    font-family: var(--font-mono);
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--bright);
-    letter-spacing: -1px;
-  }
-
-  .hero-stat p {
-    font-size: 13px;
-    color: var(--silver);
-    margin-top: 4px;
-    letter-spacing: 0.3px;
-  }
-
-  /* Floating 3D element hint */
-  .hero-visual {
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 420px;
-    height: 420px;
-    opacity: 0;
-    animation: fadeIn 1.2s 0.6s forwards;
-  }
-
-  .hero-visual-inner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .precision-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 212, 170, 0.15);
-    animation: spin 20s linear infinite;
-  }
-
-  .precision-ring:nth-child(1) {
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-  }
-
-  .precision-ring:nth-child(2) {
-    width: 75%; height: 75%;
-    top: 12.5%; left: 12.5%;
-    border-color: rgba(0, 212, 170, 0.1);
-    animation-direction: reverse;
-    animation-duration: 15s;
-  }
-
-  .precision-ring:nth-child(3) {
-    width: 50%; height: 50%;
-    top: 25%; left: 25%;
-    border-color: rgba(0, 212, 170, 0.08);
-    animation-duration: 25s;
-  }
-
-  .precision-center {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 30px rgba(0, 212, 170, 0.4);
-  }
-
-  .precision-crosshair {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .precision-crosshair::before,
-  .precision-crosshair::after {
-    content: '';
-    position: absolute;
-    background: rgba(0, 212, 170, 0.2);
-  }
-
-  .precision-crosshair::before {
-    width: 420px; height: 1px;
-    top: 0; left: -210px;
-  }
-
-  .precision-crosshair::after {
-    width: 1px; height: 420px;
-    left: 0; top: -210px;
-  }
-
-  .dimension-label {
-    position: absolute;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: rgba(0, 212, 170, 0.5);
-    letter-spacing: 1px;
-  }
-
-  .dimension-label.top { top: -20px; left: 50%; transform: translateX(-50%); }
-  .dimension-label.right { right: -60px; top: 50%; transform: translateY(-50%); }
-
-  /* ===== TRUST BAR ===== */
-  .trust-bar {
-    padding: 48px 48px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    background: rgba(255,255,255,0.01);
-  }
-
-  .trust-bar-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--silver);
-    text-align: center;
-    margin-bottom: 32px;
-  }
-
-  .trust-logos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 56px;
-    flex-wrap: wrap;
-  }
-
-  .trust-logo {
-    font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--iron);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    user-select: none;
-  }
-
-  .trust-logo:hover { color: var(--silver); }
-
-  /* ===== SECTION STYLES ===== */
-  section { padding: 120px 48px; }
-
-  .section-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .section-eyebrow::before {
-    content: '';
-    width: 24px;
-    height: 1px;
-    background: var(--accent);
-  }
-
-  .section-title {
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    margin-bottom: 20px;
-  }
-
-  .section-desc {
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--silver);
-    max-width: 520px;
-  }
-
-  /* ===== CAPABILITIES ===== */
-  .capabilities {
-    background: var(--graphite);
-  }
-
-  .cap-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    margin-top: 64px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 16px;
-    overflow: hidden;
-  }
-
-  .cap-card {
-    background: var(--graphite);
-    padding: 48px 40px;
-    position: relative;
-    transition: all 0.4s;
-    cursor: default;
-  }
-
-  .cap-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s;
-  }
-
-  .cap-card:hover::before { transform: scaleX(1); }
-
-  .cap-card:hover {
-    background: var(--steel);
-  }
-
-  .cap-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--accent-glow);
-    border: 1px solid rgba(0, 212, 170, 0.2);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 28px;
-  }
-
-  .cap-icon svg {
-    width: 22px;
-    height: 22px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 1.5;
-  }
-
-  .cap-card h3 {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    margin-bottom: 12px;
-    color: var(--bright);
-  }
-
-  .cap-card p {
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--silver);
-  }
-
-  .cap-specs {
-    margin-top: 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .cap-spec {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    color: var(--accent);
-    background: var(--accent-glow);
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 212, 170, 0.1);
-  }
-
-  /* ===== DIFFERENTIATOR / INDIA POSITIONING ===== */
-  .differentiator {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .diff-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    margin-top: 64px;
-  }
-
-  .diff-content {}
-
-  .diff-content h3 {
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    margin-bottom: 20px;
-    line-height: 1.3;
-  }
-
-  .diff-content p {
-    font-size: 16px;
-    line-height: 1.75;
-    color: var(--silver);
-    margin-bottom: 20px;
-  }
-
-  .diff-advantages {
-    margin-top: 36px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .diff-advantage {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .diff-advantage-icon {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    background: var(--accent-glow);
-    border: 1px solid rgba(0, 212, 170, 0.15);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2px;
-  }
-
-  .diff-advantage-icon svg {
-    width: 16px;
-    height: 16px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 2;
-  }
-
-  .diff-advantage h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .diff-advantage p {
-    font-size: 14px;
-    color: var(--silver);
-    line-height: 1.6;
-    margin-bottom: 0;
-  }
-
-  /* Comparison visual */
-  .diff-visual {
-    position: relative;
-  }
-
-  .comparison-card {
-    background: var(--graphite);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 40px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .comparison-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-  }
-
-  .comparison-header {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 32px;
-  }
-
-  .comparison-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .comparison-row:last-child { border-bottom: none; }
-
-  .comparison-metric {
-    font-size: 14px;
-    color: var(--fog);
-  }
-
-  .comparison-values {
-    display: flex;
-    gap: 32px;
-  }
-
-  .comparison-value {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    text-align: center;
-    min-width: 80px;
-  }
-
-  .comparison-value.trumould {
-    color: var(--accent);
-    font-weight: 700;
-  }
-
-  .comparison-value.other {
-    color: var(--silver);
-  }
-
-  .comparison-col-header {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  /* ===== HOW IT WORKS ===== */
-  .how-it-works {
-    background: var(--graphite);
-  }
-
-  .steps-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    margin-top: 64px;
-    position: relative;
-  }
-
-  .steps-grid::before {
-    content: '';
-    position: absolute;
-    top: 36px;
-    left: 12.5%;
-    right: 12.5%;
-    height: 1px;
-    background: linear-gradient(90deg, 
-      transparent, 
-      rgba(0, 212, 170, 0.3) 20%, 
-      rgba(0, 212, 170, 0.3) 80%, 
-      transparent
-    );
-  }
-
-  .step {
-    text-align: center;
-    padding: 0 24px;
-    position: relative;
-  }
-
-  .step-number {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: var(--steel);
-    border: 2px solid rgba(0, 212, 170, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    position: relative;
-    z-index: 2;
-    transition: all 0.4s;
-  }
-
-  .step:hover .step-number {
-    background: var(--accent);
-    color: var(--coal);
-    box-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
-  }
-
-  .step h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    letter-spacing: -0.3px;
-  }
-
-  .step p {
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--silver);
-  }
-
-  /* ===== RELIABILITY SECTION ===== */
-  .reliability {
-    position: relative;
-  }
-
-  .reliability-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    margin-top: 64px;
-  }
-
-  .rel-card {
-    background: var(--graphite);
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 12px;
-    padding: 40px 32px;
-    text-align: center;
-    transition: all 0.4s;
-  }
-
-  .rel-card:hover {
-    border-color: rgba(0, 212, 170, 0.15);
-    transform: translateY(-4px);
-  }
-
-  .rel-number {
-    font-family: var(--font-mono);
-    font-size: 42px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: -2px;
-    margin-bottom: 8px;
-  }
-
-  .rel-label {
-    font-size: 14px;
-    color: var(--silver);
-    line-height: 1.5;
-  }
-
-  /* ===== PLATFORM PREVIEW ===== */
-  .platform {
-    background: var(--graphite);
-  }
-
-  .platform-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 80px;
-    align-items: center;
-    margin-top: 64px;
-  }
-
-  .platform-features {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .platform-feature {
-    display: flex;
-    gap: 16px;
-    padding: 20px;
-    border-radius: 12px;
-    transition: background 0.3s;
-    cursor: default;
-  }
-
-  .platform-feature:hover {
-    background: var(--steel);
-  }
-
-  .platform-feature-dot {
-    width: 8px;
-    height: 8px;
-    min-width: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    margin-top: 7px;
-  }
-
-  .platform-feature h4 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    letter-spacing: -0.3px;
-  }
-
-  .platform-feature p {
-    font-size: 14px;
-    color: var(--silver);
-    line-height: 1.6;
-  }
-
-  /* Mock dashboard */
-  .platform-mock {
-    background: var(--steel);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  }
-
-  .mock-titlebar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 20px;
-    background: rgba(255,255,255,0.03);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .mock-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--iron);
-  }
-
-  .mock-dot:nth-child(1) { background: #ff5f57; }
-  .mock-dot:nth-child(2) { background: #ffbd2e; }
-  .mock-dot:nth-child(3) { background: #28c840; }
-
-  .mock-content {
-    padding: 24px;
-  }
-
-  .mock-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-  }
-
-  .mock-header h5 {
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .mock-badge {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    background: rgba(40, 200, 64, 0.15);
-    color: #28c840;
-    padding: 4px 10px;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
-  }
-
-  .mock-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .mock-table th {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--silver);
-    text-align: left;
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .mock-table td {
-    font-size: 13px;
-    padding: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    color: var(--fog);
-  }
-
-  .mock-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-  }
-
-  .mock-status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-
-  .mock-status-dot.green { background: #28c840; }
-  .mock-status-dot.yellow { background: #ffbd2e; }
-  .mock-status-dot.blue { background: #007aff; }
-
-  .mock-progress {
-    width: 100%;
-    height: 4px;
-    background: var(--iron);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 20px;
-  }
-
-  .mock-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), #00f5c8);
-    border-radius: 2px;
-    width: 72%;
-  }
-
-  .mock-progress-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--silver);
-    margin-top: 8px;
-    text-align: right;
-  }
-
-  /* ===== INDUSTRIES ===== */
-  .industries-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 48px;
-  }
-
-  .industry-tag {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--fog);
-    padding: 12px 24px;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 100px;
-    transition: all 0.3s;
-    cursor: default;
-  }
-
-  .industry-tag:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-glow);
-  }
-
-  /* ===== TESTIMONIALS ===== */
-  .testimonials {
-    background: var(--graphite);
-  }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-top: 64px;
-  }
-
-  .testimonial-card {
-    background: var(--steel);
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 16px;
-    padding: 40px;
-    transition: border-color 0.3s;
-  }
-
-  .testimonial-card:hover {
-    border-color: rgba(0, 212, 170, 0.15);
-  }
-
-  .testimonial-stars {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 20px;
-  }
-
-  .testimonial-stars svg {
-    width: 16px;
-    height: 16px;
-    fill: var(--accent);
-  }
-
-  .testimonial-text {
-    font-size: 16px;
-    line-height: 1.75;
-    color: var(--fog);
-    margin-bottom: 24px;
-    font-style: italic;
-  }
-
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .testimonial-avatar {
-    width: 40px;
-    height: 40px;
-    background: var(--iron);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .testimonial-name {
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .testimonial-role {
-    font-size: 13px;
-    color: var(--silver);
-  }
-
-  /* ===== CTA SECTION ===== */
-  .cta-section {
-    text-align: center;
-    position: relative;
-    padding: 160px 48px;
-  }
-
-  .cta-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .cta-section .section-title {
-    max-width: 600px;
-    margin: 0 auto 20px;
-  }
-
-  .cta-section .section-desc {
-    max-width: 480px;
-    margin: 0 auto 40px;
-    text-align: center;
-  }
-
-  .cta-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .btn-outline {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--bright);
-    padding: 16px 36px;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 8px;
-    cursor: pointer;
-    background: transparent;
-    letter-spacing: 0.5px;
-    transition: all 0.3s;
-    text-decoration: none;
-  }
-
-  .btn-outline:hover {
-    border-color: var(--bright);
-    background: rgba(255,255,255,0.05);
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    padding: 80px 48px 40px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 64px;
-    margin-bottom: 64px;
-  }
-
-  .footer-brand p {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--silver);
-    margin-top: 16px;
-    max-width: 300px;
-  }
-
-  .footer-contact {
-    margin-top: 20px;
-  }
-
-  .footer-contact a {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--accent);
-    text-decoration: none;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .footer-col h4 {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--fog);
-    margin-bottom: 20px;
-  }
-
-  .footer-col a {
-    display: block;
-    font-size: 14px;
-    color: var(--silver);
-    text-decoration: none;
-    margin-bottom: 12px;
-    transition: color 0.3s;
-  }
-
-  .footer-col a:hover { color: var(--bright); }
-
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .footer-bottom p {
-    font-size: 13px;
-    color: var(--silver);
-  }
-
-  .footer-certifications {
-    display: flex;
-    gap: 16px;
-  }
-
-  .footer-cert {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: var(--silver);
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 4px;
-  }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 1024px) {
-    .hero-visual { display: none; }
-    .cap-grid { grid-template-columns: repeat(2, 1fr); }
-    .diff-grid { grid-template-columns: 1fr; gap: 48px; }
-    .platform-grid { grid-template-columns: 1fr; }
-    .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-    .steps-grid::before { display: none; }
-    .reliability-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    section { padding: 80px 24px; }
-    .hero { padding: 100px 24px 60px; }
-    .trust-bar { padding: 36px 24px; }
-    
-    .nav-links { display: none; }
-    .mobile-menu-btn { display: block; }
-    
-    .cap-grid { grid-template-columns: 1fr; }
-    .steps-grid { grid-template-columns: 1fr; }
-    .reliability-grid { grid-template-columns: 1fr 1fr; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-    
-    .hero-stats { flex-direction: column; gap: 24px; }
-    .hero-actions { flex-direction: column; align-items: flex-start; }
-    .cta-actions { flex-direction: column; }
-    
-    .comparison-values { gap: 20px; }
-    .comparison-value { min-width: 60px; font-size: 12px; }
-
-    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-  }
+:root{--primary:#FE4F02;--primary-hover:#e54700;--primary-light:rgba(254,79,2,.08);--tint-05:#FFF4EE;--tint-1:#FFE9DD;--tint-4:#FFA777;--success:#03C270;--warning:#F59E0B;--info:#3B82F6;--slate-50:#F8FAFC;--slate-100:#F1F5F9;--slate-200:#E2E8F0;--slate-300:#CBD5E1;--slate-400:#94A3B8;--slate-500:#64748B;--slate-600:#475569;--slate-700:#334155;--slate-800:#1E293B;--slate-900:#0F172A;--slate-950:#020617;--stone-50:#FAFAF9;--stone-100:#F5F5F4;--fd:'Inter',sans-serif;--fb:'Manrope',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--fb);background:#fff;color:var(--slate-900);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--slate-200);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+nav.scrolled .nl-name{color:var(--slate-900)}nav.scrolled .nl-tag{color:var(--slate-400)}nav.scrolled .nav-links>li>a{color:var(--slate-600)}nav.scrolled .nav-links>li>a:hover{color:var(--slate-900)}nav.scrolled .nav-signin{color:var(--slate-600)!important;border-color:var(--slate-200)!important}
+.nav-logo{display:flex;align-items:center;text-decoration:none;gap:8px;flex-shrink:0}
+.nav-logo svg{height:38px;width:auto}
+.nl-text{display:flex;flex-direction:column}
+.nl-name{font-family:var(--fd);font-size:20px;font-weight:700;color:#fff;letter-spacing:-.5px;line-height:1.1}.nl-name span{font-weight:400}
+.nl-tag{font-family:var(--fb);font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--slate-400);line-height:1;margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:6px;list-style:none}
+.nav-links>li{position:relative}.nav-links>li>a{font-family:var(--fb);font-size:14px;font-weight:500;color:var(--slate-300);text-decoration:none;padding:8px 14px;border-radius:6px;transition:all .2s;display:flex;align-items:center;gap:4px}
+.nav-links>li>a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nd{position:relative}.nd-menu{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:8px;min-width:220px;box-shadow:0 12px 40px rgba(0,0,0,.1);opacity:0;visibility:hidden;transform:translateY(8px);transition:all .25s;z-index:100}
+.nd:hover .nd-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.nd-menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14px;font-weight:500;color:var(--slate-600);text-decoration:none;border-radius:8px;transition:all .2s}
+.nd-menu a:hover{background:var(--tint-05);color:var(--primary)}.nd-menu a svg{width:18px;height:18px;stroke:var(--slate-400);fill:none;stroke-width:1.5;flex-shrink:0}.nd-menu a:hover svg{stroke:var(--primary)}
+.nav-cta{font-family:var(--fb)!important;font-size:13px!important;font-weight:600!important;background:var(--primary)!important;color:#fff!important;padding:9px 20px!important;border-radius:8px!important;transition:all .3s!important}
+.nav-cta:hover{background:var(--primary-hover)!important;transform:translateY(-1px);box-shadow:0 4px 12px rgba(254,79,2,.25)}
+.nav-signin{font-family:var(--fb)!important;font-size:13px!important;font-weight:600!important;color:var(--slate-300)!important;padding:9px 16px!important;border:1px solid var(--slate-600)!important;border-radius:8px!important;transition:all .3s!important}
+.nav-signin:hover{color:#fff!important;border-color:var(--slate-400)!important;background:rgba(255,255,255,.04)!important}
+.nav-signin svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.mob-btn{display:none;background:none;border:none;cursor:pointer;padding:8px}.mob-btn span{display:block;width:22px;height:2px;background:#fff;margin:5px 0;border-radius:1px}
+
+/* BUTTONS */
+.btn-p{font-family:var(--fb);font-size:15px;font-weight:600;background:var(--primary);color:#fff;padding:14px 32px;border:none;border-radius:10px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-p:hover{background:var(--primary-hover);transform:translateY(-2px);box-shadow:0 8px 24px rgba(254,79,2,.3)}.btn-p svg{transition:transform .3s}.btn-p:hover svg{transform:translateX(3px)}
+.btn-g{font-family:var(--fb);font-size:15px;font-weight:500;color:var(--slate-300);text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:10px;border:1px solid var(--slate-700);transition:all .3s}
+.btn-g:hover{color:#fff;border-color:var(--slate-500);background:rgba(255,255,255,.04)}
+.btn-o{font-family:var(--fb);font-size:15px;font-weight:600;color:var(--slate-700);padding:14px 28px;border:1px solid var(--slate-300);border-radius:10px;cursor:pointer;background:transparent;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-o:hover{border-color:var(--primary);color:var(--primary);background:var(--tint-05)}
+.btn-ow{font-family:var(--fb);font-size:15px;font-weight:600;color:#fff;padding:14px 32px;border:1px solid var(--slate-600);border-radius:10px;background:transparent;transition:all .3s;text-decoration:none;cursor:pointer}
+.btn-ow:hover{border-color:var(--slate-400);background:rgba(255,255,255,.04)}
+
+/* SECTIONS */
+section{padding:100px 48px}.con{max-width:1200px;margin:0 auto}
+.se{font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.se::before{content:'';width:24px;height:2px;background:var(--primary);border-radius:1px}
+.st{font-family:var(--fd);font-size:clamp(30px,3.5vw,44px);font-weight:700;letter-spacing:-1px;line-height:1.3;margin-bottom:14px;color:var(--slate-900)}
+.sd{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--slate-500);max-width:560px}
+.s-dark{background:var(--slate-950);color:#fff}.s-dark .st{color:#fff}.s-dark .sd{color:var(--slate-400)}
+.s-mut{background:var(--stone-50)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 48px 80px;background:var(--slate-950);color:#fff}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:72px 72px;pointer-events:none}
+.h-glow{position:absolute;top:-20%;right:-10%;width:800px;height:800px;background:radial-gradient(circle,rgba(254,79,2,.07) 0%,rgba(254,79,2,.02) 40%,transparent 70%);pointer-events:none}
+.h-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1200px;margin:0 auto;position:relative;z-index:2}
+.h-content{max-width:560px}
+.h-ey{font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);margin-bottom:24px;display:flex;align-items:center;gap:12px;opacity:0;animation:fu .7s .2s forwards}
+.h-ey::before{content:'';width:28px;height:2px;background:var(--primary)}
+.hero h1{font-family:var(--fd);font-size:clamp(36px,4.5vw,56px);font-weight:200;line-height:1.15;letter-spacing:-1.5px;margin-bottom:24px;color:#fff;opacity:0;animation:fu .7s .35s forwards}
+.hero h1 strong{font-weight:700;color:var(--primary)}
+.h-sub{font-size:17px;line-height:1.7;color:var(--slate-400);max-width:480px;margin-bottom:36px;opacity:0;animation:fu .7s .5s forwards}
+.h-act{display:flex;align-items:center;gap:14px;opacity:0;animation:fu .7s .65s forwards}
+.h-met{display:flex;gap:36px;margin-top:56px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06);opacity:0;animation:fu .7s .85s forwards}
+.h-mv{font-family:var(--fd);font-size:28px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1}.h-mv span{color:var(--primary)}
+.h-ml{font-family:var(--fb);font-size:12px;font-weight:500;color:var(--slate-500);margin-top:6px}
+.h-vis{position:relative;display:flex;align-items:center;justify-content:center;opacity:0;animation:fi 1s .5s forwards}
+.h-img{position:relative;width:100%;max-width:460px}
+.h-img-ph{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--slate-800),var(--slate-900));border:1px solid rgba(255,255,255,.06);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;z-index:2}
+.h-img-ph svg{width:80px;height:80px;stroke:var(--slate-600);fill:none;stroke-width:1}
+.h-badge{position:absolute;bottom:-14px;left:24px;background:#fff;border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:3}
+.h-badge span{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--slate-900)}
+.h-ring{position:absolute;top:-20px;right:-20px;width:120px;height:120px;border:1px solid rgba(254,79,2,.15);border-radius:50%;z-index:1;animation:rr 20s linear infinite}
+.h-ring::before{content:'±0.005mm';position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:10px;font-weight:600;color:rgba(254,79,2,.4);letter-spacing:.5px;white-space:nowrap}
+
+/* TRUST */
+.tb{padding:36px 48px;background:var(--slate-50);border-bottom:1px solid var(--slate-200)}
+.tb .con{display:flex;align-items:center;gap:40px;justify-content:center;flex-wrap:wrap}
+.tb-l{font-family:var(--fb);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate-400);white-space:nowrap}
+.tb-c{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.tc{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--slate-600)}
+.tc svg{width:16px;height:16px;stroke:var(--success);fill:none;stroke-width:2}
+
+/* CAPABILITIES 6 GRID */
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.cc{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:32px 28px;position:relative;transition:all .4s;overflow:hidden;display:flex;flex-direction:column}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform .5s;border-radius:16px 16px 0 0}
+.cc:hover{border-color:var(--primary);box-shadow:0 8px 30px rgba(254,79,2,.08);transform:translateY(-4px)}.cc:hover::before{transform:scaleX(1)}
+.cc-ico{width:56px;height:56px;margin-bottom:20px}.cc-ico svg{width:56px;height:56px}
+.cc h3{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--primary);margin-bottom:8px;line-height:1.3}
+.cc p{font-size:14px;line-height:1.7;color:var(--slate-500);flex:1}
+.cc-arr{width:36px;height:36px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:20px;transition:all .3s;text-decoration:none}
+.cc-arr svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2}
+.cc:hover .cc-arr{transform:translate(2px,-2px);box-shadow:0 4px 12px rgba(254,79,2,.3)}
+
+/* TOGGLE */
+.tg-sec{padding:100px 48px;background:var(--slate-50)}
+.tg-tabs{display:flex;justify-content:center;gap:0;margin-bottom:48px;background:var(--slate-200);border-radius:12px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto}
+.tg-tab{font-family:var(--fb);font-size:15px;font-weight:600;padding:12px 32px;border-radius:10px;border:none;cursor:pointer;background:transparent;color:var(--slate-500);transition:all .3s}
+.tg-tab.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(254,79,2,.25)}
+.tg-tab:not(.active):hover{color:var(--slate-700)}
+.tg-con{display:none}.tg-con.active{display:block}
+.tg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
+.tg-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:32px;text-align:center;transition:all .3s}
+.tg-card:hover{border-color:var(--primary);box-shadow:0 4px 20px rgba(254,79,2,.06)}
+.tg-card-img{width:100%;height:180px;background:var(--tint-05);border-radius:12px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tg-card-img svg{width:140px;height:140px}
+.tg-card h3{font-family:var(--fd);font-size:20px;font-weight:700;margin-bottom:8px;color:var(--slate-900)}
+.tg-card p{font-size:14px;line-height:1.7;color:var(--slate-500)}
+.lm{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:14px;font-weight:600;color:var(--primary);text-decoration:none;transition:gap .3s}.lm:hover{gap:10px}
+.lm svg{width:14px;height:14px;stroke:var(--primary);fill:none;stroke-width:2}
+.tg-cta{background:var(--slate-900);border-radius:20px;padding:36px 44px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.tg-cta-t h3{font-family:var(--fb);font-size:15px;font-weight:500;color:var(--slate-300);margin-bottom:4px}
+.tg-cta-t h2{font-family:var(--fd);font-size:22px;font-weight:700;color:#fff}
+.tg-cta-r{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.au-tags{display:flex;flex-wrap:wrap;gap:8px}
+.au-tag{font-size:12px;font-weight:600;color:var(--slate-300);padding:7px 14px;border:1px solid var(--slate-700);border-radius:8px;background:rgba(255,255,255,.03)}
+
+/* WHY */
+.wg{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-top:48px}
+.wa{margin-top:28px;display:flex;flex-direction:column;gap:20px}
+.wi{display:flex;gap:14px;align-items:flex-start}
+.wi-ico{width:38px;height:38px;min-width:38px;background:var(--tint-05);border:1px solid var(--tint-1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.wi-ico svg{width:16px;height:16px;stroke:var(--primary);fill:none;stroke-width:2}
+.wi h4{font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:3px;color:var(--slate-900)}
+.wi p{font-size:14px;color:var(--slate-500);line-height:1.65}
+.cmp{background:var(--slate-950);border-radius:20px;padding:36px;color:#fff;position:relative;overflow:hidden}
+.cmp::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--tint-4))}
+.cmp-h{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:24px}
+.cmp-cols{display:flex;justify-content:flex-end;gap:20px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cmp-cl{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-align:center;min-width:80px}.cmp-cl.b{color:var(--primary)}.cmp-cl.o{color:var(--slate-500)}
+.cmp-r{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}.cmp-r:last-child{border-bottom:none}
+.cmp-m{font-size:14px;color:var(--slate-300);font-weight:500}
+.cmp-v{display:flex;gap:20px}
+.cv{font-size:13px;font-weight:600;text-align:center;min-width:80px}.cv.b{color:var(--primary)}.cv.o{color:var(--slate-500)}
+
+/* RELIABILITY */
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px}
+.rc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:32px 24px;text-align:center;transition:all .4s}
+.rc:hover{border-color:rgba(254,79,2,.2);background:rgba(254,79,2,.04);transform:translateY(-4px)}
+.rn{font-family:var(--fd);font-size:40px;font-weight:700;color:var(--primary);letter-spacing:-2px;line-height:1;margin-bottom:6px}
+.rl{font-size:14px;color:var(--slate-400);line-height:1.5;font-weight:500}
+
+/* PLATFORM */
+.pg{display:grid;grid-template-columns:1fr 1.2fr;gap:72px;align-items:center;margin-top:48px}
+.pf{display:flex;flex-direction:column;gap:6px}
+.pi{display:flex;gap:14px;padding:14px;border-radius:10px;transition:background .3s;cursor:default}
+.pi:hover{background:var(--stone-100)}
+.pd{width:8px;height:8px;min-width:8px;background:var(--primary);border-radius:50%;margin-top:6px}
+.pi h4{font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:3px;color:var(--slate-900)}.pi p{font-size:13px;color:var(--slate-500);line-height:1.65}
+.pm{background:var(--slate-900);border:1px solid var(--slate-700);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.2)}
+.pm-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--slate-800);border-bottom:1px solid var(--slate-700)}
+.dot{width:10px;height:10px;border-radius:50%}.dot-r{background:#ff5f57}.dot-y{background:#ffbd2e}.dot-g{background:#28c840}
+.pm-b{padding:20px}
+.pm-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.pm-h h5{font-family:var(--fd);font-size:14px;font-weight:700;color:#fff}
+.pm-badge{font-size:10px;font-weight:600;background:rgba(3,194,112,.12);color:var(--success);padding:4px 10px;border-radius:6px}
+.mt{width:100%;border-collapse:collapse}.mt th{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--slate-500);text-align:left;padding:6px 8px;border-bottom:1px solid var(--slate-700)}
+.mt td{font-size:12px;padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--slate-300);font-weight:500}
+.sp{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600}
+.pip{width:6px;height:6px;border-radius:50%}.pg-c{background:var(--success)}.py-c{background:var(--warning)}.pb-c{background:var(--info)}
+.mp{margin-top:16px}.mp-h{display:flex;justify-content:space-between;margin-bottom:6px}.mp-h span{font-size:11px;font-weight:600;color:var(--slate-400)}
+.mp-t{width:100%;height:5px;background:var(--slate-800);border-radius:3px;overflow:hidden}
+.mp-f{height:100%;width:72%;background:linear-gradient(90deg,var(--primary),var(--tint-4));border-radius:3px}
+
+/* TESTIMONIALS */
+.tst-g{display:flex;flex-direction:column;gap:24px;margin-top:48px}
+.tst{display:grid;grid-template-columns:1fr 1fr;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:20px;overflow:hidden;transition:all .3s}
+.tst:hover{border-color:var(--primary);box-shadow:0 4px 20px rgba(254,79,2,.06)}
+.tst-txt{padding:36px;display:flex;flex-direction:column;justify-content:center}
+.tst-txt .lbl{font-family:var(--fd);font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate-400);margin-bottom:20px}
+.tst-name{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
+.tst-title{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--slate-700);margin-bottom:4px}
+.tst-co{font-size:13px;color:var(--slate-400);margin-bottom:18px;font-style:italic}
+.tst-q{font-size:15px;line-height:1.75;color:var(--slate-600);padding-left:18px;border-left:3px solid var(--primary)}
+.tst-vid{background:var(--slate-200);display:flex;align-items:stretch;min-height:300px}
+.tst-vid iframe{width:100%;min-height:300px;border:none}
+
+/* RESOURCES */
+.res-g{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.res-c{background:#fff;border:1px solid var(--slate-200);border-radius:16px;overflow:hidden;transition:all .3s;text-decoration:none;color:inherit;display:block}
+.res-c:hover{border-color:var(--primary);box-shadow:0 4px 20px rgba(254,79,2,.06);transform:translateY(-4px)}
+.res-img{width:100%;height:180px;background:linear-gradient(135deg,var(--tint-05),var(--tint-1));display:flex;align-items:center;justify-content:center}
+.cat-b{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--primary);background:#fff;padding:6px 12px;border-radius:6px}
+.res-bd{padding:24px}
+.res-meta{font-size:12px;color:var(--slate-400);font-weight:500;margin-bottom:8px}
+.res-bd h3{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--slate-900);margin-bottom:8px;line-height:1.4}
+.res-bd p{font-size:14px;color:var(--slate-500);line-height:1.65}
+.rm{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:14px;font-weight:600;color:var(--primary)}
+.rm svg{width:14px;height:14px;stroke:var(--primary);fill:none;stroke-width:2}
+
+/* CTA */
+.cta{text-align:center;position:relative;padding:120px 48px;background:var(--slate-950);color:#fff;overflow:hidden}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(254,79,2,.08),transparent 70%);pointer-events:none}
+.cta .se{justify-content:center}.cta .st{color:#fff;max-width:540px;margin:0 auto 14px}.cta .sd{color:var(--slate-400);max-width:460px;margin:0 auto 32px;text-align:center}
+.cta-a{display:flex;align-items:center;justify-content:center;gap:12px;position:relative;z-index:2}
+
+/* FOOTER */
+footer{padding:72px 48px 36px;background:var(--slate-950);color:#fff;border-top:1px solid rgba(255,255,255,.04)}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;max-width:1200px;margin:0 auto 56px}
+.fb-t{font-size:14px;line-height:1.7;color:var(--slate-400);margin-top:14px;max-width:260px}
+.fc{margin-top:16px}.fc a{font-size:13px;font-weight:600;color:var(--primary);text-decoration:none;display:block;margin-bottom:4px}
+.f-col h4{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate-300);margin-bottom:16px}
+.f-col a{display:block;font-size:14px;color:var(--slate-500);text-decoration:none;margin-bottom:8px;font-weight:500;transition:color .3s}.f-col a:hover{color:#fff}
+.f-bot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid rgba(255,255,255,.06);max-width:1200px;margin:0 auto}
+.f-bot p{font-size:13px;color:var(--slate-500)}
+.f-certs{display:flex;gap:8px}
+.f-cert{font-size:10px;font-weight:600;color:var(--slate-500);padding:4px 10px;border:1px solid rgba(255,255,255,.06);border-radius:6px}
+
+/* ANIM */
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes rr{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.rv{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.25,.46,.45,.94)}.rv.vis{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.h-inner{grid-template-columns:1fr}.h-vis{display:none}.cg{grid-template-columns:repeat(2,1fr)}.wg{grid-template-columns:1fr;gap:48px}.pg{grid-template-columns:1fr}.tg-cards{grid-template-columns:repeat(2,1fr)}.rg{grid-template-columns:repeat(2,1fr)}.res-g{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr 1fr 1fr}.tst{grid-template-columns:1fr}}
+@media(max-width:768px){nav{padding:0 24px}section,.tg-sec{padding:80px 24px}.hero{padding:100px 24px 60px}.tb{padding:28px 24px}.nav-links{display:none}.mob-btn{display:block}.cg,.tg-cards{grid-template-columns:1fr}.rg{grid-template-columns:1fr 1fr}.res-g{grid-template-columns:1fr}.h-met{flex-direction:column;gap:16px}.h-act{flex-direction:column;align-items:stretch}.cta-a{flex-direction:column;width:100%}.cta-a a{width:100%;justify-content:center;text-align:center}.tg-cta{flex-direction:column;text-align:center}.tg-cta-r{flex-direction:column}.tb .con{flex-direction:column;gap:16px}.tb-c{justify-content:center}.fg{grid-template-columns:1fr;gap:36px}.f-bot{flex-direction:column;gap:16px;text-align:center}.f-certs{flex-wrap:wrap;justify-content:center}.tst{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
+<!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">Tru<span>Mould</span></a>
+  <a href="index.html" class="nav-logo">
+    <svg width="38" height="38" viewBox="0 0 120 120" fill="none"><path d="M18 90L50 22L68 54L36 90H18Z" fill="#FE4F02"/><path d="M48 90L80 22L100 22L68 90H48Z" fill="#FE4F02" opacity=".65"/></svg>
+    <div class="nl-text"><div class="nl-name">tru <span>mould</span></div><div class="nl-tag">India/Asia Manufacturing Platform</div></div>
+  </a>
   <ul class="nav-links">
-    <li><a href="#capabilities">Capabilities</a></li>
-    <li><a href="#how-it-works">How It Works</a></li>
-    <li><a href="#platform">Platform</a></li>
-    <li><a href="#industries">Industries</a></li>
+    <li class="nd">
+      <a href="#capabilities">Capabilities <svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+      <div class="nd-menu">
+        <a href="concept-design.html"><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>Concept Design</a>
+        <a href="3d-design.html"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>3D Design</a>
+        <a href="3d-printing.html"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>3D Printing</a>
+        <a href="injection-molding.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Injection Molding</a>
+        <a href="injection-molds.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/></svg>Injection Molds</a>
+        <a href="cnc-machining.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>CNC Machining</a>
+      </div>
+    </li>
+    <li><a href="#why">Why tru mould</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="platform.html" class="nav-signin"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Sign In</a></li>
     <li><a href="#contact" class="nav-cta">Get Instant Quote</a></li>
   </ul>
-  <button class="mobile-menu-btn" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="mob-btn" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">On-Demand Manufacturing</div>
-    <h1>Custom Parts.<br>Delivered with <span class="highlight">Certainty.</span></h1>
-    <p class="hero-sub">Instant quoting, precision manufacturing, and guaranteed delivery timelines. From prototype to production — we are the reliability your supply chain has been missing.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary">
-        Get Instant Quote
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#capabilities" class="btn-secondary">
-        Explore Capabilities
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <h3>20 Days</h3>
-        <p>Express Mold Delivery</p>
+  <div class="h-glow"></div>
+  <div class="h-inner">
+    <div class="h-content">
+      <div class="h-ey">On-Demand Custom Manufacturing</div>
+      <h1>Custom Parts.<br>Delivered with <strong>Certainty.</strong></h1>
+      <p class="h-sub">Instant quoting, precision manufacturing, and guaranteed delivery timelines. From prototype to production — the reliability your supply chain has been missing.</p>
+      <div class="h-act">
+        <a href="#contact" class="btn-p">Get Instant Quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#capabilities" class="btn-g">Explore Capabilities</a>
       </div>
-      <div class="hero-stat">
-        <h3>97.8%</h3>
-        <p>On-Time Delivery Rate</p>
-      </div>
-      <div class="hero-stat">
-        <h3>500+</h3>
-        <p>Molds Delivered</p>
-      </div>
-      <div class="hero-stat">
-        <h3>50%</h3>
-        <p>Cost Savings vs. Legacy</p>
+      <div class="h-met">
+        <div><div class="h-mv">20<span> Days</span></div><div class="h-ml">Express Mold Delivery</div></div>
+        <div><div class="h-mv">97.8<span>%</span></div><div class="h-ml">On-Time Delivery</div></div>
+        <div><div class="h-mv">500<span>+</span></div><div class="h-ml">Molds Delivered</div></div>
+        <div><div class="h-mv">50<span>%</span></div><div class="h-ml">Cost Savings</div></div>
       </div>
     </div>
-  </div>
-
-  <!-- Precision visual -->
-  <div class="hero-visual">
-    <div class="hero-visual-inner">
-      <div class="precision-crosshair"></div>
-      <div class="precision-ring"></div>
-      <div class="precision-ring"></div>
-      <div class="precision-ring"></div>
-      <div class="precision-center"></div>
-      <span class="dimension-label top">±0.005mm</span>
-      <span class="dimension-label right">ISO 9001</span>
+    <div class="h-vis">
+      <div class="h-img">
+        <div class="h-img-ph">
+          <svg viewBox="0 0 200 160" fill="none"><rect x="20" y="40" width="70" height="100" rx="4" stroke="#475569" stroke-width="1.5"/><rect x="30" y="50" width="50" height="30" rx="2" fill="#1E293B" stroke="#475569"/><rect x="30" y="90" width="20" height="20" rx="2" fill="#FE4F02" opacity=".3"/><rect x="55" y="90" width="20" height="20" rx="2" fill="#FE4F02" opacity=".2"/><rect x="110" y="30" width="70" height="110" rx="4" stroke="#475569" stroke-width="1.5"/><rect x="120" y="40" width="50" height="40" rx="2" fill="#1E293B" stroke="#475569"/><circle cx="145" cy="110" r="15" stroke="#FE4F02" stroke-width="1.5" opacity=".5"/><path d="M138 110l4 4 8-8" stroke="#FE4F02" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><path d="M90 70h20M90 90h20" stroke="#334155" stroke-dasharray="4 2"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--slate-500);letter-spacing:1.5px">HIGH-VOLUME PRODUCTION</span>
+        </div>
+        <div class="h-badge"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="#03C270" fill="none" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#03C270" fill="none" stroke-width="2" stroke-linecap="round"/></svg><span>ISO 9001 Certified</span></div>
+        <div class="h-ring"></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- TRUST BAR -->
-<div class="trust-bar">
-  <div class="trust-bar-label">Trusted by engineering teams at</div>
-  <div class="trust-logos">
-    <span class="trust-logo">Automotive OEMs</span>
-    <span class="trust-logo">Consumer Electronics</span>
-    <span class="trust-logo">Medical Devices</span>
-    <span class="trust-logo">Aerospace</span>
-    <span class="trust-logo">Industrial</span>
+<div class="tb"><div class="con">
+  <span class="tb-l">Why teams choose us</span>
+  <div class="tb-c">
+    <div class="tc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Instant Quoting</div>
+    <div class="tc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>20-Day Express Molds</div>
+    <div class="tc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Real-Time Tracking</div>
+    <div class="tc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>ISO Certified</div>
+    <div class="tc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>50% Cost Savings</div>
   </div>
-</div>
+</div></div>
 
 <!-- CAPABILITIES -->
-<section class="capabilities" id="capabilities">
-  <div class="reveal">
-    <div class="section-eyebrow">Manufacturing Capabilities</div>
-    <h2 class="section-title">Three processes.<br>One reliable partner.</h2>
-    <p class="section-desc">From rapid prototyping to full-scale production. Upload your CAD, get an instant quote, and let us handle the rest.</p>
+<section id="capabilities"><div class="con">
+  <div class="rv" style="text-align:center"><div class="se" style="justify-content:center">Manufacturing Capabilities</div><h2 class="st" style="margin:0 auto 14px">Our Expertise</h2><p class="sd" style="margin:0 auto">End-to-end manufacturing — from initial concept to full-scale production.</p></div>
+  <div class="cg rv">
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><rect x="8" y="8" width="32" height="40" rx="2"/><path d="M14 16h20M14 22h14M14 28h18"/><circle cx="46" cy="40" r="12" stroke-dasharray="3 2"/><path d="M42 40l3 3 5-5" stroke="#FE4F02" stroke-width="2"/><path d="M8 38l6-8 5 4 7-10 6 8" stroke="#FE4F02" stroke-width="1.5" opacity=".5"/></svg></div><h3>Concept Design</h3><p>Develop concepts for products that align with your goals and market needs.</p><a href="concept-design.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><rect x="6" y="14" width="36" height="28" rx="3"/><path d="M14 42v8M28 42v8M10 50h24"/><path d="M16 24l6 4-6 4" stroke="#FE4F02" stroke-width="2"/><rect x="36" y="8" width="20" height="16" rx="2" fill="#FFF4EE" stroke="#FE4F02"/><path d="M42 14l3 3 5-5" stroke="#FE4F02" stroke-width="1.5"/></svg></div><h3>3D Design</h3><p>Transform your vision into intricately detailed models optimized for manufacturability.</p><a href="3d-design.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><rect x="10" y="34" width="44" height="22" rx="3"/><rect x="16" y="8" width="32" height="12" rx="2"/><path d="M24 20v14M40 20v14"/><rect x="26" y="40" width="12" height="10" rx="1" fill="#FFF4EE" stroke="#FE4F02"/><path d="M32 28v12" stroke="#FE4F02" stroke-width="2" stroke-dasharray="3 2"/></svg></div><h3>3D Printing</h3><p>Advanced FDM, SLA, and SLS technologies bring your digital models to life.</p><a href="3d-printing.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><rect x="6" y="16" width="24" height="32" rx="2"/><rect x="34" y="16" width="24" height="32" rx="2"/><path d="M30 28h4M30 36h4"/><rect x="12" y="24" width="12" height="16" rx="1" fill="#FFF4EE" stroke="#FE4F02"/><path d="M40 24h12v16H40" stroke="#FE4F02" fill="#FFF4EE"/></svg></div><h3>Injection Molding</h3><p>Xpress Mold for fast turnaround. Production Mold for high-precision, high-volume runs.</p><a href="injection-molding.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><path d="M12 48V16a4 4 0 0 1 4-4h32a4 4 0 0 1 4 4v32"/><rect x="18" y="20" width="28" height="20" rx="2" fill="#FFF4EE" stroke="#FE4F02"/><path d="M26 28h12M32 24v8" stroke="#FE4F02" stroke-width="1.5"/><circle cx="24" cy="48" r="4"/><circle cx="40" cy="48" r="4"/><path d="M8 52h48" stroke-dasharray="4 2"/></svg></div><h3>Injection Molds</h3><p>Precision-engineered molds with high-quality steel. 100+ molds managed in parallel.</p><a href="injection-molds.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="cc"><div class="cc-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#0F172A" stroke-width="1.5"><rect x="8" y="20" width="48" height="32" rx="3"/><path d="M20 8v12M44 8v12"/><circle cx="32" cy="36" r="10" stroke="#FE4F02"/><circle cx="32" cy="36" r="4" fill="#FFF4EE" stroke="#FE4F02"/><path d="M32 26v-6M42 36h6M32 46v6M22 36h-6" stroke="#FE4F02" stroke-width="1" stroke-dasharray="2 2"/></svg></div><h3>CNC Machining</h3><p>CNC machining, sheet metal fabrication, and assembly. ±0.005mm tolerances.</p><a href="cnc-machining.html" class="cc-arr"><svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H6M12 4v6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
   </div>
+</div></section>
 
-  <div class="cap-grid reveal">
-    <div class="cap-card">
-      <div class="cap-icon">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3"/></svg>
+<!-- PROTOTYPE VS PRODUCTION TOGGLE -->
+<div class="tg-sec" id="solutions"><div class="con">
+  <div class="rv" style="text-align:center"><div class="se" style="justify-content:center">Solutions</div><h2 class="st" style="margin:0 auto 14px">From First Prototype to Full Production</h2><p class="sd" style="margin:0 auto">Whether you're validating a concept or scaling to millions, we have the right solution.</p></div>
+  <div class="rv">
+    <div class="tg-tabs"><button class="tg-tab active" data-target="proto">Prototype</button><button class="tg-tab" data-target="prod">Production</button></div>
+    <!-- PROTOTYPE -->
+    <div class="tg-con active" id="proto">
+      <div class="tg-cards">
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><rect x="30" y="25" width="55" height="45" rx="4" stroke="#CBD5E1" stroke-width="1.5"/><rect x="38" y="33" width="38" height="10" rx="2" fill="#FFF4EE"/><rect x="38" y="48" width="24" height="10" rx="2" fill="#FFE9DD"/><path d="M105 40l18 18-18 18" stroke="#FE4F02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="148" cy="75" r="22" stroke="#FE4F02" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M138 75h20M148 65v20" stroke="#FE4F02" stroke-width="1.5"/><rect x="30" y="95" width="28" height="35" rx="3" fill="#FFF4EE" stroke="#FE4F02"/><rect x="65" y="105" width="28" height="25" rx="3" fill="#FFE9DD" stroke="#FE4F02" opacity=".7"/></svg></div><h3>Dream It, Design It!</h3><p>Rapid CAD-to-quote with expert DFM feedback to refine your design fast.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><rect x="40" y="30" width="50" height="70" rx="4" stroke="#CBD5E1" stroke-width="1.5"/><path d="M50 60h30M50 75h20" stroke="#CBD5E1"/><path d="M65 40v20" stroke="#FE4F02" stroke-width="2" stroke-dasharray="3 2"/><rect x="55" y="80" width="20" height="12" rx="2" fill="#FE4F02" opacity=".2"/><rect x="110" y="25" width="50" height="50" rx="6" stroke="#FE4F02" stroke-width="1.5"/><path d="M120 45l8 8 14-14" stroke="#FE4F02" stroke-width="2" stroke-linecap="round"/><rect x="110" y="90" width="50" height="30" rx="4" fill="#FFF4EE" stroke="#CBD5E1"/><path d="M120 100h30M120 110h20" stroke="#CBD5E1"/></svg></div><h3>Rapid Prototyping</h3><p>3D printing and Xpress Mold deliver functional prototypes in days, not months.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><path d="M30 120L60 40l30 50 25-30 25 40 30-20" stroke="#FE4F02" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="40" r="6" fill="#FFF4EE" stroke="#FE4F02" stroke-width="1.5"/><circle cx="90" cy="90" r="6" fill="#FFF4EE" stroke="#FE4F02" stroke-width="1.5"/><circle cx="115" cy="60" r="6" fill="#FFF4EE" stroke="#FE4F02" stroke-width="1.5"/><circle cx="140" cy="100" r="6" fill="#FFF4EE" stroke="#FE4F02" stroke-width="1.5"/><circle cx="170" cy="80" r="6" fill="#FFF4EE" stroke="#FE4F02" stroke-width="1.5"/><rect x="40" y="128" width="120" height="16" rx="3" fill="#FFF4EE" stroke="#CBD5E1"/><path d="M48 136h50" stroke="#FE4F02" stroke-width="3" stroke-linecap="round"/></svg></div><h3>Iterate & Launch</h3><p>Low MOQs and fast turnaround — iterate quickly and get to market faster.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
-      <h3>Injection Molding</h3>
-      <p>Production-grade tooling with Express Mould technology. From T1 samples to full production runs with guaranteed quality at every stage.</p>
-      <div class="cap-specs">
-        <span class="cap-spec">Express 20-Day Molds</span>
-        <span class="cap-spec">100+ Parallel Molds</span>
-        <span class="cap-spec">Multi-Cavity</span>
-      </div>
+      <div class="tg-cta"><div class="tg-cta-t"><h3>Are You Looking for a Manufacturing Solution?</h3><h2>Start Your Manufacturing Journey Today!</h2></div><div class="tg-cta-r"><a href="#contact" class="btn-p">Get Instant Quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="au-tags"><span class="au-tag">Bootstrapped</span><span class="au-tag">VC-Backed Founder</span><span class="au-tag">StartUp Founder</span></div></div></div>
     </div>
-
-    <div class="cap-card">
-      <div class="cap-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <!-- PRODUCTION -->
+    <div class="tg-con" id="prod">
+      <div class="tg-cards">
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><rect x="25" y="30" width="60" height="80" rx="4" stroke="#CBD5E1" stroke-width="1.5"/><rect x="35" y="40" width="40" height="25" rx="2" fill="#FFF4EE" stroke="#FE4F02"/><rect x="35" y="75" width="18" height="18" rx="2" fill="#FE4F02" opacity=".2"/><rect x="57" y="75" width="18" height="18" rx="2" fill="#FE4F02" opacity=".15"/><path d="M100 50h18M100 70h18M100 90h18" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/><circle cx="95" cy="50" r="3" fill="#03C270"/><circle cx="95" cy="70" r="3" fill="#03C270"/><circle cx="95" cy="90" r="3" fill="#F59E0B"/><rect x="130" y="40" width="42" height="70" rx="4" stroke="#FE4F02" stroke-width="1.5"/><path d="M140 55h22M140 65h18M140 75h14M140 85h22" stroke="#CBD5E1"/><path d="M140 95h22" stroke="#FE4F02" stroke-width="2"/></svg></div><h3>Production Tooling</h3><p>High-precision molds built with premium steel. Engineered for millions of cycles.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><rect x="20" y="55" width="160" height="50" rx="4" stroke="#CBD5E1" stroke-width="1.5"/><rect x="30" y="65" width="25" height="30" rx="2" fill="#FFF4EE" stroke="#FE4F02"/><rect x="65" y="65" width="25" height="30" rx="2" fill="#FFE9DD" stroke="#FE4F02" opacity=".8"/><rect x="100" y="65" width="25" height="30" rx="2" fill="#FFF4EE" stroke="#FE4F02" opacity=".6"/><rect x="135" y="65" width="25" height="30" rx="2" fill="#FFE9DD" stroke="#FE4F02" opacity=".4"/><path d="M20 118h160" stroke="#CBD5E1"/><circle cx="50" cy="123" r="4" stroke="#CBD5E1" stroke-width="1.5"/><circle cx="100" cy="123" r="4" stroke="#CBD5E1" stroke-width="1.5"/><circle cx="150" cy="123" r="4" stroke="#CBD5E1" stroke-width="1.5"/></svg></div><h3>Scale Manufacturing</h3><p>100+ molds in parallel with consistent quality control across every production run.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div class="tg-card"><div class="tg-card-img"><svg viewBox="0 0 200 160" fill="none"><rect x="30" y="25" width="140" height="85" rx="6" stroke="#CBD5E1" stroke-width="1.5"/><rect x="40" y="35" width="55" height="30" rx="3" fill="#FFF4EE" stroke="#FE4F02"/><path d="M50 48h35M50 56h25" stroke="#FE4F02" opacity=".5"/><rect x="105" y="35" width="55" height="30" rx="3" fill="#FFF4EE" stroke="#CBD5E1"/><circle cx="132" cy="50" r="10" stroke="#03C270" stroke-width="1.5"/><path d="M128 50l3 3 5-5" stroke="#03C270" stroke-width="1.5"/><rect x="40" y="75" width="120" height="6" rx="3" fill="#E2E8F0"/><rect x="40" y="75" width="84" height="6" rx="3" fill="#FE4F02" opacity=".8"/><rect x="40" y="90" width="55" height="10" rx="2" fill="#FFF4EE"/><path d="M45 95h45" stroke="#94A3B8"/></svg></div><h3>Track & Deliver</h3><p>Real-time dashboards, quality reports, and shipping updates — all in one platform.</p><a href="#" class="lm">Learn More <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
-      <h3>CNC Machining</h3>
-      <p>Precision metal and plastic parts with tight tolerances. Multi-axis capabilities for complex geometries, rapid turnaround on prototypes and short runs.</p>
-      <div class="cap-specs">
-        <span class="cap-spec">3, 4 & 5-Axis</span>
-        <span class="cap-spec">±0.005mm Tolerance</span>
-        <span class="cap-spec">50+ Materials</span>
-      </div>
-    </div>
-
-    <div class="cap-card">
-      <div class="cap-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      </div>
-      <h3>3D Printing</h3>
-      <p>Functional prototypes and end-use parts across FDM, SLA, and SLS technologies. Accelerate design validation with production-grade additive manufacturing.</p>
-      <div class="cap-specs">
-        <span class="cap-spec">FDM / SLA / SLS</span>
-        <span class="cap-spec">As Fast as 48 Hrs</span>
-        <span class="cap-spec">Design Freedom</span>
-      </div>
+      <div class="tg-cta"><div class="tg-cta-t"><h3>Looking for a Reliable Production Partner?</h3><h2>Scale with Transparency & Precision.</h2></div><div class="tg-cta-r"><a href="#contact" class="btn-p">Get Instant Quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="au-tags"><span class="au-tag">Enterprise</span><span class="au-tag">OEM</span><span class="au-tag">Supply Chain Lead</span></div></div></div>
     </div>
   </div>
-</section>
+</div></div>
 
-<!-- DIFFERENTIATOR - INDIA POSITIONING -->
-<section class="differentiator" id="why-trumould">
-  <div class="diff-grid">
-    <div class="diff-content reveal">
-      <div class="section-eyebrow">Why TruMould</div>
-      <h2 class="section-title">Resilient supply chains<br>start with better sourcing.</h2>
-      <p class="section-desc">Global supply chains are shifting. Companies need manufacturing partners that combine competitive costs with reliability, transparency, and IP protection — without the geopolitical risk.</p>
-      
-      <div class="diff-advantages">
-        <div class="diff-advantage">
-          <div class="diff-advantage-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <h4>IP Protection & Transparency</h4>
-            <p>Robust NDA frameworks, real-time digital dashboards, and full visibility from design to delivery.</p>
-          </div>
-        </div>
-        <div class="diff-advantage">
-          <div class="diff-advantage-icon">
-            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          </div>
-          <div>
-            <h4>De-risked Supply Chain</h4>
-            <p>Diversify your manufacturing beyond traditional sources. Tariff-advantaged, with direct shipping to the US and Europe.</p>
-          </div>
-        </div>
-        <div class="diff-advantage">
-          <div class="diff-advantage-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <div>
-            <h4>Faster Than You Expect</h4>
-            <p>Express Mould technology cuts production timelines in half. 100 molds in parallel within 3 months — a capability that was previously impossible outside China.</p>
-          </div>
-        </div>
-        <div class="diff-advantage">
-          <div class="diff-advantage-icon">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div>
-            <h4>Engineering-Led Support</h4>
-            <p>Dedicated engineers for DFM feedback, material selection, and design optimization — not a faceless portal.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="diff-visual reveal">
-      <div class="comparison-card">
-        <div class="comparison-header">Sourcing Comparison</div>
-        <div class="comparison-row" style="border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; margin-bottom: 8px;">
-          <div class="comparison-metric" style="font-weight: 600; color: var(--fog);"></div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">
-              <div class="comparison-col-header" style="color: var(--accent);">TruMould</div>
-            </div>
-            <div class="comparison-value other">
-              <div class="comparison-col-header">Traditional</div>
-            </div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Mold Lead Time</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">20 days</div>
-            <div class="comparison-value other">60-90 days</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Quoting Speed</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">Instant</div>
-            <div class="comparison-value other">3-7 days</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Order Tracking</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">Real-time</div>
-            <div class="comparison-value other">Email/Phone</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Parallel Tooling</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">100+</div>
-            <div class="comparison-value other">5-10</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">IP Protection</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">NDA + Digital</div>
-            <div class="comparison-value other">Varies</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Tariff Risk</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">Low</div>
-            <div class="comparison-value other">High</div>
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-metric">Quality Reports</div>
-          <div class="comparison-values">
-            <div class="comparison-value trumould">Dashboard</div>
-            <div class="comparison-value other">PDF/Email</div>
-          </div>
-        </div>
-      </div>
+<!-- WHY TRUMOULD -->
+<section id="why"><div class="con"><div class="wg">
+  <div class="rv"><div class="se">Why tru mould</div><h2 class="st">Resilient supply chains start with better sourcing.</h2><p class="sd">Companies need partners combining competitive costs with reliability, transparency, and IP protection — without geopolitical risk.</p>
+    <div class="wa">
+      <div class="wi"><div class="wi-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h4>IP Protection & Transparency</h4><p>Robust NDA frameworks, real-time digital dashboards, and full visibility from design to delivery.</p></div></div>
+      <div class="wi"><div class="wi-ico"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><h4>De-Risked Supply Chain</h4><p>Diversify beyond traditional sources. Tariff-advantaged, with direct shipping to the US and Europe.</p></div></div>
+      <div class="wi"><div class="wi-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><h4>Faster Than You Expect</h4><p>Express Mould cuts timelines in half. 100 molds in parallel within 3 months — previously impossible outside China.</p></div></div>
+      <div class="wi"><div class="wi-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><h4>Engineering-Led Support</h4><p>Dedicated engineers for DFM feedback, material selection, and design optimization.</p></div></div>
     </div>
   </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how-it-works" id="how-it-works">
-  <div class="reveal">
-    <div class="section-eyebrow">How It Works</div>
-    <h2 class="section-title">From CAD file to delivered parts.</h2>
-    <p class="section-desc">A streamlined digital workflow that takes the guesswork out of custom manufacturing.</p>
-  </div>
-
-  <div class="steps-grid reveal">
-    <div class="step">
-      <div class="step-number">01</div>
-      <h3>Upload & Quote</h3>
-      <p>Upload your 3D CAD file and receive an instant, AI-powered quote with DFM feedback in minutes — not days.</p>
-    </div>
-    <div class="step">
-      <div class="step-number">02</div>
-      <h3>DFM & Optimize</h3>
-      <p>Our engineers review your design, suggest material optimizations, and ensure manufacturability before production begins.</p>
-    </div>
-    <div class="step">
-      <div class="step-number">03</div>
-      <h3>Manufacture</h3>
-      <p>Production kicks off with real-time dashboard visibility. Track every milestone from tooling to T1 samples to final run.</p>
-    </div>
-    <div class="step">
-      <div class="step-number">04</div>
-      <h3>Inspect & Deliver</h3>
-      <p>Rigorous quality inspection at every checkpoint. Parts delivered on time with full documentation and certification.</p>
-    </div>
-  </div>
-</section>
+  <div class="rv"><div class="cmp"><div class="cmp-h">Sourcing Comparison</div><div class="cmp-cols"><div class="cmp-cl b">tru mould</div><div class="cmp-cl o">Traditional</div></div>
+    <div class="cmp-r"><div class="cmp-m">Mold Lead Time</div><div class="cmp-v"><div class="cv b">20 days</div><div class="cv o">60-90 days</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">Quoting Speed</div><div class="cmp-v"><div class="cv b">Instant</div><div class="cv o">3-7 days</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">Order Tracking</div><div class="cmp-v"><div class="cv b">Real-time</div><div class="cv o">Email/Phone</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">Parallel Tooling</div><div class="cmp-v"><div class="cv b">100+</div><div class="cv o">5-10</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">IP Protection</div><div class="cmp-v"><div class="cv b">NDA + Digital</div><div class="cv o">Varies</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">Tariff Risk</div><div class="cmp-v"><div class="cv b">Low</div><div class="cv o">High</div></div></div>
+    <div class="cmp-r"><div class="cmp-m">Quality Reports</div><div class="cmp-v"><div class="cv b">Dashboard</div><div class="cv o">PDF / Email</div></div></div>
+  </div></div>
+</div></div></section>
 
 <!-- RELIABILITY -->
-<section class="reliability" id="reliability">
-  <div class="reveal">
-    <div class="section-eyebrow">Built on Reliability</div>
-    <h2 class="section-title">Numbers that build trust.</h2>
-    <p class="section-desc">We measure everything so you don't have to worry about anything.</p>
+<section class="s-dark" id="reliability"><div class="con">
+  <div class="rv"><div class="se">Built on Reliability</div><h2 class="st">Numbers that build trust.</h2><p class="sd">We measure everything so you don't have to worry about anything.</p></div>
+  <div class="rg rv">
+    <div class="rc"><div class="rn">97.8%</div><div class="rl">On-Time Delivery Rate</div></div>
+    <div class="rc"><div class="rn">20</div><div class="rl">Day Express Mold Delivery</div></div>
+    <div class="rc"><div class="rn">100+</div><div class="rl">Molds Managed In Parallel</div></div>
+    <div class="rc"><div class="rn">24/7</div><div class="rl">Order Tracking Dashboard</div></div>
   </div>
-
-  <div class="reliability-grid reveal">
-    <div class="rel-card">
-      <div class="rel-number">97.8%</div>
-      <div class="rel-label">On-Time<br>Delivery Rate</div>
-    </div>
-    <div class="rel-card">
-      <div class="rel-number">20</div>
-      <div class="rel-label">Day Express<br>Mold Delivery</div>
-    </div>
-    <div class="rel-card">
-      <div class="rel-number">100+</div>
-      <div class="rel-label">Molds Managed<br>In Parallel</div>
-    </div>
-    <div class="rel-card">
-      <div class="rel-number">24/7</div>
-      <div class="rel-label">Order Tracking<br>Dashboard</div>
-    </div>
-  </div>
-</section>
+</div></section>
 
 <!-- PLATFORM -->
-<section class="platform" id="platform">
-  <div class="platform-grid">
-    <div class="reveal">
-      <div class="section-eyebrow">Digital Platform</div>
-      <h2 class="section-title">Full visibility,<br>zero surprises.</h2>
-      <p class="section-desc" style="margin-bottom: 40px;">Your custom order dashboard gives you complete control and transparency across every project, from quote to delivery.</p>
-      
-      <div class="platform-features">
-        <div class="platform-feature">
-          <div class="platform-feature-dot"></div>
-          <div>
-            <h4>Real-Time Order Tracking</h4>
-            <p>Live status updates on tooling, sampling, production, and shipping milestones.</p>
-          </div>
-        </div>
-        <div class="platform-feature">
-          <div class="platform-feature-dot"></div>
-          <div>
-            <h4>Quality Documentation</h4>
-            <p>Inspection reports, material certificates, and hardness reports — all accessible in your dashboard.</p>
-          </div>
-        </div>
-        <div class="platform-feature">
-          <div class="platform-feature-dot"></div>
-          <div>
-            <h4>Instant DFM Feedback</h4>
-            <p>AI-powered manufacturability analysis on every uploaded part, with engineering support on complex designs.</p>
-          </div>
-        </div>
-        <div class="platform-feature">
-          <div class="platform-feature-dot"></div>
-          <div>
-            <h4>Multi-Project Management</h4>
-            <p>Manage all your orders, quotes, and communications in one centralized workspace.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="reveal">
-      <div class="platform-mock">
-        <div class="mock-titlebar">
-          <div class="mock-dot"></div>
-          <div class="mock-dot"></div>
-          <div class="mock-dot"></div>
-        </div>
-        <div class="mock-content">
-          <div class="mock-header">
-            <h5>Active Orders</h5>
-            <span class="mock-badge">3 IN PRODUCTION</span>
-          </div>
-          <table class="mock-table">
-            <thead>
-              <tr>
-                <th>Part</th>
-                <th>Process</th>
-                <th>Status</th>
-                <th>ETA</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Housing-Assembly-v4</td>
-                <td>Injection Mold</td>
-                <td><span class="mock-status"><span class="mock-status-dot green"></span>T1 Approved</span></td>
-                <td>Mar 8</td>
-              </tr>
-              <tr>
-                <td>Bracket-Mount-R2</td>
-                <td>CNC Machining</td>
-                <td><span class="mock-status"><span class="mock-status-dot yellow"></span>In Production</span></td>
-                <td>Feb 28</td>
-              </tr>
-              <tr>
-                <td>Sensor-Cover-Proto</td>
-                <td>3D Print (SLA)</td>
-                <td><span class="mock-status"><span class="mock-status-dot blue"></span>Shipping</span></td>
-                <td>Feb 24</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="mock-progress"></div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div class="mock-progress-label" style="text-align: left;">Overall Pipeline Progress</div>
-            <div class="mock-progress-label">72%</div>
-          </div>
-          <div class="mock-progress">
-            <div class="mock-progress-fill"></div>
-          </div>
-        </div>
-      </div>
+<section class="s-mut" id="platform"><div class="con"><div class="pg">
+  <div class="rv"><div class="se">Digital Platform</div><h2 class="st">Full visibility,<br>zero surprises.</h2><p class="sd" style="margin-bottom:28px">Your dashboard gives you complete control and transparency across every project.</p>
+    <div class="pf">
+      <div class="pi"><div class="pd"></div><div><h4>Real-Time Order Tracking</h4><p>Live status updates on tooling, sampling, production, and shipping.</p></div></div>
+      <div class="pi"><div class="pd"></div><div><h4>Quality Documentation</h4><p>Inspection reports, material certificates, hardness reports — all in your dashboard.</p></div></div>
+      <div class="pi"><div class="pd"></div><div><h4>Instant DFM Feedback</h4><p>AI-powered manufacturability analysis with engineering support.</p></div></div>
+      <div class="pi"><div class="pd"></div><div><h4>Multi-Project Management</h4><p>Manage orders, quotes, and communications in one workspace.</p></div></div>
     </div>
   </div>
-</section>
-
-<!-- INDUSTRIES -->
-<section class="industries" id="industries">
-  <div class="reveal">
-    <div class="section-eyebrow">Industries We Serve</div>
-    <h2 class="section-title">Precision parts for<br>critical applications.</h2>
-    <p class="section-desc">From automotive OEMs to medical devices, we understand the quality standards your industry demands.</p>
-  </div>
-
-  <div class="industries-tags reveal">
-    <span class="industry-tag">Automotive</span>
-    <span class="industry-tag">Medical Devices</span>
-    <span class="industry-tag">Consumer Electronics</span>
-    <span class="industry-tag">Aerospace & Defense</span>
-    <span class="industry-tag">Industrial Equipment</span>
-    <span class="industry-tag">Consumer Goods</span>
-    <span class="industry-tag">Robotics</span>
-    <span class="industry-tag">Telecommunications</span>
-    <span class="industry-tag">Energy & Cleantech</span>
-    <span class="industry-tag">Packaging</span>
-  </div>
-</section>
+  <div class="rv"><div class="pm"><div class="pm-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="pm-b">
+    <div class="pm-h"><h5>Active Orders</h5><span class="pm-badge">3 IN PRODUCTION</span></div>
+    <table class="mt"><thead><tr><th>Part</th><th>Process</th><th>Status</th><th>ETA</th></tr></thead><tbody>
+      <tr><td>Housing-Assembly-v4</td><td>Injection Mold</td><td><span class="sp"><span class="pip pg-c"></span>T1 Approved</span></td><td>Mar 8</td></tr>
+      <tr><td>Bracket-Mount-R2</td><td>CNC Machining</td><td><span class="sp"><span class="pip py-c"></span>In Production</span></td><td>Feb 28</td></tr>
+      <tr><td>Sensor-Cover-Proto</td><td>3D Print SLA</td><td><span class="sp"><span class="pip pb-c"></span>Shipping</span></td><td>Feb 24</td></tr>
+    </tbody></table>
+    <div class="mp"><div class="mp-h"><span>Pipeline Progress</span><span style="color:var(--primary)">72%</span></div><div class="mp-t"><div class="mp-f"></div></div></div>
+  </div></div></div>
+</div></div></section>
 
 <!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="reveal">
-    <div class="section-eyebrow">What Our Clients Say</div>
-    <h2 class="section-title">Trusted by engineers<br>who can't afford delays.</h2>
+<section id="testimonials"><div class="con">
+  <div class="rv"><div class="se">What Our Customers Say</div><h2 class="st">Trusted by engineers who<br>can't afford delays.</h2></div>
+  <div class="tst-g rv">
+    <div class="tst"><div class="tst-txt"><div class="lbl">Customer Testimonial</div><div class="tst-name">Vivek Singhal</div><div class="tst-title">Co-Founder @ Bidso</div><div class="tst-co">Bidso is a tech enabled contract manufacturer for outdoor toys.</div><p class="tst-q">Working with Trumould has been an absolute pleasure, their reliability and commitment to quality are second to none. All the projects have been really seamless and we can always count on them. As we look to the future we are excited to partner with Trumould as our growth partner.</p></div><div class="tst-vid"><iframe src="https://drive.google.com/file/d/1baf42zAxYw3JECrwxSPlnzuy3Gg30S68/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div></div>
+    <div class="tst"><div class="tst-txt"><div class="lbl">Customer Testimonial</div><div class="tst-name">Samarjeet Singh</div><div class="tst-title">Project Lead @ Yulu</div><div class="tst-co">Yulu offers unique vehicles for the daily commute.</div><p class="tst-q">Trumould really did a fantastic job in making the mould in 2 weeks and gave the part in 15 days from order date. Team is extremely supportive and take care of all our changes.</p></div><div class="tst-vid"><iframe src="https://drive.google.com/file/d/1sbirBsOXG3AnMO9abfq6yCnkDoXePVWE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div></div>
   </div>
+</div></section>
 
-  <div class="testimonials-grid reveal">
-    <div class="testimonial-card">
-      <div class="testimonial-stars">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      </div>
-      <p class="testimonial-text">"Despite our doubts, we took a leap of faith with an Indian manufacturer. Today we are glad that we made the right decision with TruMould. Quality, communication, and on-time delivery — all exceeded expectations."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">VP</div>
-        <div>
-          <div class="testimonial-name">VP of Engineering</div>
-          <div class="testimonial-role">Consumer Electronics Company, USA</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="testimonial-card">
-      <div class="testimonial-stars">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      </div>
-      <p class="testimonial-text">"The success of a new product company relies on getting good vendors. We were skeptical to give the project to a company we didn't know. After the first project, we were happy with the quality and their commitment."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">FK</div>
-        <div>
-          <div class="testimonial-name">Founder</div>
-          <div class="testimonial-role">Hardware Startup, USA</div>
-        </div>
-      </div>
-    </div>
+<!-- RESOURCES -->
+<section class="s-mut" id="resources"><div class="con">
+  <div class="rv" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px"><div><div class="se">Resources</div><h2 class="st">Insights & Guides</h2><p class="sd">Expert content on manufacturing, design, and supply chain strategy.</p></div><a href="resources.html" class="btn-o" style="margin-bottom:14px">View All Articles <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+  <div class="res-g rv">
+    <a href="blog-china-to-india.html" class="res-c"><div class="res-img"><span class="cat-b">Industry Insights</span></div><div class="res-bd"><div class="res-meta">Feb 2026 · 8 min read</div><h3>Why Companies Are Moving Manufacturing from China to India in 2026</h3><p>Tariff shifts, IP concerns, and supply chain diversification driving a historic migration.</p><div class="rm">Read Article <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></a>
+    <a href="blog-xpress-vs-production.html" class="res-c"><div class="res-img"><span class="cat-b">Injection Molding</span></div><div class="res-bd"><div class="res-meta">Jan 2026 · 6 min read</div><h3>Xpress Mold vs Production Mold: Which One Do You Need?</h3><p>When to use fast-turnaround tooling versus production-grade steel molds.</p><div class="rm">Read Article <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></a>
+    <a href="blog-dfm-mistakes.html" class="res-c"><div class="res-img"><span class="cat-b">Design</span></div><div class="res-bd"><div class="res-meta">Jan 2026 · 10 min read</div><h3>DFM: 7 Mistakes That Delay Your Project</h3><p>Common DFM pitfalls causing costly tooling revisions and how to avoid them.</p><div class="rm">Read Article <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></a>
   </div>
-</section>
+</div></section>
 
 <!-- CTA -->
-<section class="cta-section" id="contact">
-  <div class="reveal">
-    <div class="section-eyebrow" style="justify-content: center;">Get Started</div>
-    <h2 class="section-title">Ready to build with<br><span style="background: linear-gradient(135deg, var(--accent), #00f5c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">certainty?</span></h2>
-    <p class="section-desc">Upload your CAD file and get an instant quote. Or talk to our engineering team about your next project.</p>
-    <div class="cta-actions">
-      <a href="#" class="btn-primary">
-        Get Instant Quote
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#" class="btn-outline">Talk to Engineering</a>
-    </div>
-  </div>
-</section>
+<section class="cta" id="contact"><div class="cta-glow"></div><div class="con rv">
+  <div class="se" style="justify-content:center">Get Started</div>
+  <h2 class="st">Ready to build with<br><span style="color:var(--primary)">certainty?</span></h2>
+  <p class="sd" style="max-width:460px;margin:0 auto 32px;text-align:center">Upload your CAD file and get an instant quote. Or talk to our engineering team about your next project.</p>
+  <div class="cta-a"><a href="#" class="btn-p">Get Instant Quote <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="#" class="btn-ow">Talk to Engineering</a></div>
+</div></section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo" style="font-size: 22px;">Tru<span>Mould</span></a>
-      <p>On-demand custom manufacturing platform. Injection molding, CNC machining, and 3D printing — delivered with certainty from India to the world.</p>
-      <div class="footer-contact">
-        <a href="mailto:info@trumould.com">info@trumould.com</a>
-        <a href="tel:+17205197806">+1 (720) 519-7806</a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>Capabilities</h4>
-      <a href="#">Injection Molding</a>
-      <a href="#">CNC Machining</a>
-      <a href="#">3D Printing</a>
-      <a href="#">Contract Manufacturing</a>
-      <a href="#">Mold Design</a>
-    </div>
-    <div class="footer-col">
-      <h4>Platform</h4>
-      <a href="#">Get Instant Quote</a>
-      <a href="#">Order Dashboard</a>
-      <a href="#">Materials Library</a>
-      <a href="#">DFM Feedback</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="#">About TruMould</a>
-      <a href="#">Careers</a>
-      <a href="#">Blog</a>
-      <a href="#">Contact</a>
-    </div>
+<footer><div class="fg">
+  <div>
+    <a href="index.html" class="nav-logo" style="display:inline-flex"><svg width="32" height="32" viewBox="0 0 120 120" fill="none"><path d="M18 90L50 22L68 54L36 90H18Z" fill="#FE4F02"/><path d="M48 90L80 22L100 22L68 90H48Z" fill="#FE4F02" opacity=".65"/></svg><div class="nl-text"><div class="nl-name" style="color:#fff">tru <span>mould</span></div><div class="nl-tag">India/Asia Manufacturing Platform</div></div></a>
+    <p class="fb-t">On-demand custom manufacturing. Injection molding, CNC machining, and 3D printing — delivered with certainty from India to the world.</p>
+    <div class="fc"><a href="mailto:info@trumould.com">info@trumould.com</a><a href="tel:+17205197806">+1 (720) 519-7806</a></div>
   </div>
-  <div class="footer-bottom">
-    <p>&copy; 2026 TruMould. All rights reserved.</p>
-    <div class="footer-certifications">
-      <span class="footer-cert">ISO 9001</span>
-      <span class="footer-cert">ISO 14001</span>
-      <span class="footer-cert">IATF 16949</span>
-    </div>
-  </div>
+  <div class="f-col"><h4>Capabilities</h4><a href="concept-design.html">Concept Design</a><a href="3d-design.html">3D Design</a><a href="3d-printing.html">3D Printing</a><a href="injection-molding.html">Injection Molding</a><a href="injection-molds.html">Injection Molds</a><a href="cnc-machining.html">CNC Machining</a></div>
+  <div class="f-col"><h4>Solutions</h4><a href="#solutions">Prototype</a><a href="#solutions">Production</a><a href="#">Xpress Mold</a><a href="#">Production Mold</a></div>
+  <div class="f-col"><h4>Platform</h4><a href="platform.html">Sign In</a><a href="#">Order Dashboard</a><a href="#">Materials Library</a><a href="#">DFM Feedback</a></div>
+  <div class="f-col"><h4>Company</h4><a href="#">About</a><a href="resources.html">Resources</a><a href="#">Careers</a><a href="#">Contact</a></div>
+</div>
+<div class="f-bot"><p>&copy; 2026 tru mould. All rights reserved.</p><div class="f-certs"><span class="f-cert">ISO 9001</span><span class="f-cert">ISO 14001</span><span class="f-cert">IATF 16949</span></div></div>
 </footer>
 
 <script>
-  // Navbar scroll effect
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  });
-
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-  
-  reveals.forEach(el => revealObserver.observe(el));
-
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-
-  // Counter animation for reliability numbers
-  function animateCounters() {
-    const counters = document.querySelectorAll('.rel-number');
-    counters.forEach(counter => {
-      const text = counter.textContent;
-      if (counter.dataset.animated) return;
-      
-      const num = parseFloat(text.replace(/[^0-9.]/g, ''));
-      const suffix = text.replace(/[0-9.]/g, '');
-      const duration = 1500;
-      const start = performance.now();
-      
-      counter.dataset.animated = 'true';
-      
-      function update(now) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        
-        let current;
-        if (text.includes('.')) {
-          current = (num * eased).toFixed(1);
-        } else {
-          current = Math.floor(num * eased);
-        }
-        
-        counter.textContent = current + suffix;
-        
-        if (progress < 1) requestAnimationFrame(update);
-      }
-      
-      requestAnimationFrame(update);
-    });
-  }
-
-  const relSection = document.querySelector('.reliability');
-  const relObserver = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      setTimeout(animateCounters, 300);
-      relObserver.disconnect();
-    }
-  }, { threshold: 0.3 });
-  
-  relObserver.observe(relSection);
-
-  // Mobile menu toggle
-  const menuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
-  if (menuBtn) {
-    menuBtn.addEventListener('click', () => {
-      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-      if (navLinks.style.display === 'flex') {
-        navLinks.style.position = 'fixed';
-        navLinks.style.top = '60px';
-        navLinks.style.left = '0';
-        navLinks.style.right = '0';
-        navLinks.style.background = 'rgba(10,10,10,0.98)';
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.padding = '24px';
-        navLinks.style.gap = '20px';
-        navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-      }
-    });
-  }
+document.addEventListener('DOMContentLoaded',()=>{
+  const nav=document.getElementById('navbar');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>50));
+  document.querySelectorAll('.rv').forEach(el=>{new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('vis')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'}).observe(el)});
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const h=a.getAttribute('href');if(h==='#')return;e.preventDefault();const t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+  document.querySelectorAll('.tg-tab').forEach(tab=>{tab.addEventListener('click',()=>{const t=tab.dataset.target;document.querySelectorAll('.tg-tab').forEach(x=>x.classList.remove('active'));tab.classList.add('active');document.querySelectorAll('.tg-con').forEach(c=>c.classList.remove('active'));document.getElementById(t)?.classList.add('active')})});
+  const rs=document.getElementById('reliability');
+  if(rs)new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){setTimeout(()=>{document.querySelectorAll('.rn').forEach(el=>{if(el.dataset.d)return;el.dataset.d='1';const t=el.textContent,n=parseFloat(t.replace(/[^0-9.]/g,'')),s=t.replace(/[0-9.]/g,''),h=t.includes('.'),st=performance.now();(function f(now){const p=Math.min((now-st)/1400,1),ea=1-Math.pow(1-p,3);el.textContent=(h?(n*ea).toFixed(1):Math.floor(n*ea))+s;if(p<1)requestAnimationFrame(f)})(st)})},200);o.disconnect()}},{threshold:.3}).observe(rs);
+  const mb=document.querySelector('.mob-btn'),nl=document.querySelector('.nav-links');
+  mb?.addEventListener('click',()=>{const o=nl.classList.contains('mo');if(o){nl.classList.remove('mo');nl.removeAttribute('style')}else{nl.classList.add('mo');Object.assign(nl.style,{display:'flex',position:'fixed',top:'72px',left:'0',right:'0',background:'rgba(255,255,255,.98)',flexDirection:'column',padding:'24px',gap:'12px',borderBottom:'1px solid #E2E8F0',boxShadow:'0 8px 30px rgba(0,0,0,.08)',backdropFilter:'blur(20px)',zIndex:'999'})}});
+});
 </script>
-
 </body>
 </html>
