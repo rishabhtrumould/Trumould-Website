@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TruMould — On-Demand Custom Manufacturing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coal: #0a0a0a;
+    --graphite: #1a1a1a;
+    --steel: #2a2a2a;
+    --iron: #3a3a3a;
+    --silver: #8a8a8a;
+    --fog: #c5c5c5;
+    --white: #f0f0f0;
+    --bright: #ffffff;
+    --accent: #00d4aa;
+    --accent-dim: #00b892;
+    --accent-glow: rgba(0, 212, 170, 0.15);
+    --accent-warm: #ff6b35;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--coal);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== NOISE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== NAVIGATION ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--bright);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fog);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--bright); }
+
+  .nav-cta {
+    font-family: var(--font-mono) !important;
+    font-size: 13px !important;
+    background: var(--accent) !important;
+    color: var(--coal) !important;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+  }
+
+  .nav-cta:hover {
+    background: var(--bright) !important;
+    transform: translateY(-1px);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    margin: 5px 0;
+    transition: 0.3s;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 48px 80px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    top: 0; right: -10%;
+    width: 65%;
+    height: 100%;
+    background: radial-gradient(ellipse at 60% 40%, rgba(0, 212, 170, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(0, 212, 170, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Grid lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 48px; right: 48px; bottom: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 720px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), #00f5c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--silver);
+    max-width: 520px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--accent);
+    color: var(--coal);
+    padding: 16px 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover {
+    background: var(--bright);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 212, 170, 0.2);
+  }
+
+  .btn-secondary {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fog);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s;
+  }
+
+  .btn-secondary:hover { color: var(--bright); }
+
+  .btn-secondary svg { transition: transform 0.3s; }
+  .btn-secondary:hover svg { transform: translateX(3px); }
+
+  /* Hero stats bar */
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 72px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .hero-stat h3 {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bright);
+    letter-spacing: -1px;
+  }
+
+  .hero-stat p {
+    font-size: 13px;
+    color: var(--silver);
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Floating 3D element hint */
+  .hero-visual {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: 420px;
+    opacity: 0;
+    animation: fadeIn 1.2s 0.6s forwards;
+  }
+
+  .hero-visual-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .precision-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 212, 170, 0.15);
+    animation: spin 20s linear infinite;
+  }
+
+  .precision-ring:nth-child(1) {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+  }
+
+  .precision-ring:nth-child(2) {
+    width: 75%; height: 75%;
+    top: 12.5%; left: 12.5%;
+    border-color: rgba(0, 212, 170, 0.1);
+    animation-direction: reverse;
+    animation-duration: 15s;
+  }
+
+  .precision-ring:nth-child(3) {
+    width: 50%; height: 50%;
+    top: 25%; left: 25%;
+    border-color: rgba(0, 212, 170, 0.08);
+    animation-duration: 25s;
+  }
+
+  .precision-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 212, 170, 0.4);
+  }
+
+  .precision-crosshair {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .precision-crosshair::before,
+  .precision-crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(0, 212, 170, 0.2);
+  }
+
+  .precision-crosshair::before {
+    width: 420px; height: 1px;
+    top: 0; left: -210px;
+  }
+
+  .precision-crosshair::after {
+    width: 1px; height: 420px;
+    left: 0; top: -210px;
+  }
+
+  .dimension-label {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(0, 212, 170, 0.5);
+    letter-spacing: 1px;
+  }
+
+  .dimension-label.top { top: -20px; left: 50%; transform: translateX(-50%); }
+  .dimension-label.right { right: -60px; top: 50%; transform: translateY(-50%); }
+
+  /* ===== TRUST BAR ===== */
+  .trust-bar {
+    padding: 48px 48px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.01);
+  }
+
+  .trust-bar-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .trust-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+
+  .trust-logo {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--iron);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    user-select: none;
+  }
+
+  .trust-logo:hover { color: var(--silver); }
+
+  /* ===== SECTION STYLES ===== */
+  section { padding: 120px 48px; }
+
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--silver);
+    max-width: 520px;
+  }
+
+  /* ===== CAPABILITIES ===== */
+  .capabilities {
+    background: var(--graphite);
+  }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 64px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .cap-card {
+    background: var(--graphite);
+    padding: 48px 40px;
+    position: relative;
+    transition: all 0.4s;
+    cursor: default;
+  }
+
+  .cap-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s;
+  }
+
+  .cap-card:hover::before { transform: scaleX(1); }
+
+  .cap-card:hover {
+    background: var(--steel);
+  }
+
+  .cap-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .cap-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .cap-card h3 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+    color: var(--bright);
+  }
+
+  .cap-card p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--silver);
+  }
+
+  .cap-specs {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cap-spec {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 212, 170, 0.1);
+  }
+
+  /* ===== DIFFERENTIATOR / INDIA POSITIONING ===== */
+  .differentiator {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 64px;
+  }
+
+  .diff-content {}
+
+  .diff-content h3 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .diff-content p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--silver);
+    margin-bottom: 20px;
+  }
+
+  .diff-advantages {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .diff-advantage {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .diff-advantage-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(0, 212, 170, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .diff-advantage-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .diff-advantage h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .diff-advantage p {
+    font-size: 14px;
+    color: var(--silver);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* Comparison visual */
+  .diff-visual {
+    position: relative;
+  }
+
+  .comparison-card {
+    background: var(--graphite);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .comparison-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .comparison-header {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+
+  .comparison-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .comparison-row:last-child { border-bottom: none; }
+
+  .comparison-metric {
+    font-size: 14px;
+    color: var(--fog);
+  }
+
+  .comparison-values {
+    display: flex;
+    gap: 32px;
+  }
+
+  .comparison-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-align: center;
+    min-width: 80px;
+  }
+
+  .comparison-value.trumould {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .comparison-value.other {
+    color: var(--silver);
+  }
+
+  .comparison-col-header {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .how-it-works {
+    background: var(--graphite);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 64px;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(0, 212, 170, 0.3) 20%, 
+      rgba(0, 212, 170, 0.3) 80%, 
+      transparent
+    );
+  }
+
+  .step {
+    text-align: center;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .step-number {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--steel);
+    border: 2px solid rgba(0, 212, 170, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s;
+  }
+
+  .step:hover .step-number {
+    background: var(--accent);
+    color: var(--coal);
+    box-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
+  }
+
+  .step h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .step p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--silver);
+  }
+
+  /* ===== RELIABILITY SECTION ===== */
+  .reliability {
+    position: relative;
+  }
+
+  .reliability-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 64px;
+  }
+
+  .rel-card {
+    background: var(--graphite);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: all 0.4s;
+  }
+
+  .rel-card:hover {
+    border-color: rgba(0, 212, 170, 0.15);
+    transform: translateY(-4px);
+  }
+
+  .rel-number {
+    font-family: var(--font-mono);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+
+  .rel-label {
+    font-size: 14px;
+    color: var(--silver);
+    line-height: 1.5;
+  }
+
+  /* ===== PLATFORM PREVIEW ===== */
+  .platform {
+    background: var(--graphite);
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 64px;
+  }
+
+  .platform-features {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .platform-feature {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .platform-feature:hover {
+    background: var(--steel);
+  }
+
+  .platform-feature-dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 7px;
+  }
+
+  .platform-feature h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .platform-feature p {
+    font-size: 14px;
+    color: var(--silver);
+    line-height: 1.6;
+  }
+
+  /* Mock dashboard */
+  .platform-mock {
+    background: var(--steel);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .mock-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .mock-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--iron);
+  }
+
+  .mock-dot:nth-child(1) { background: #ff5f57; }
+  .mock-dot:nth-child(2) { background: #ffbd2e; }
+  .mock-dot:nth-child(3) { background: #28c840; }
+
+  .mock-content {
+    padding: 24px;
+  }
+
+  .mock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .mock-header h5 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mock-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(40, 200, 64, 0.15);
+    color: #28c840;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .mock-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .mock-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mock-table td {
+    font-size: 13px;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: var(--fog);
+  }
+
+  .mock-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .mock-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .mock-status-dot.green { background: #28c840; }
+  .mock-status-dot.yellow { background: #ffbd2e; }
+  .mock-status-dot.blue { background: #007aff; }
+
+  .mock-progress {
+    width: 100%;
+    height: 4px;
+    background: var(--iron);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+
+  .mock-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #00f5c8);
+    border-radius: 2px;
+    width: 72%;
+  }
+
+  .mock-progress-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--silver);
+    margin-top: 8px;
+    text-align: right;
+  }
+
+  /* ===== INDUSTRIES ===== */
+  .industries-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+
+  .industry-tag {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fog);
+    padding: 12px 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .industry-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials {
+    background: var(--graphite);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  .testimonial-card {
+    background: var(--steel);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 40px;
+    transition: border-color 0.3s;
+  }
+
+  .testimonial-card:hover {
+    border-color: rgba(0, 212, 170, 0.15);
+  }
+
+  .testimonial-stars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-stars svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--accent);
+  }
+
+  .testimonial-text {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--fog);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .testimonial-avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--iron);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .testimonial-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .testimonial-role {
+    font-size: 13px;
+    color: var(--silver);
+  }
+
+  /* ===== CTA SECTION ===== */
+  .cta-section {
+    text-align: center;
+    position: relative;
+    padding: 160px 48px;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-section .section-title {
+    max-width: 600px;
+    margin: 0 auto 20px;
+  }
+
+  .cta-section .section-desc {
+    max-width: 480px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-outline {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--bright);
+    padding: 16px 36px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--bright);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 80px 48px 40px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--silver);
+    margin-top: 16px;
+    max-width: 300px;
+  }
+
+  .footer-contact {
+    margin-top: 20px;
+  }
+
+  .footer-contact a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 20px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--silver);
+    text-decoration: none;
+    margin-bottom: 12px;
+    transition: color 0.3s;
+  }
+
+  .footer-col a:hover { color: var(--bright); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+    color: var(--silver);
+  }
+
+  .footer-certifications {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-cert {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--silver);
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero-visual { display: none; }
+    .cap-grid { grid-template-columns: repeat(2, 1fr); }
+    .diff-grid { grid-template-columns: 1fr; gap: 48px; }
+    .platform-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    .steps-grid::before { display: none; }
+    .reliability-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .trust-bar { padding: 36px 24px; }
+    
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+    
+    .cap-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .reliability-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    
+    .hero-stats { flex-direction: column; gap: 24px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .cta-actions { flex-direction: column; }
+    
+    .comparison-values { gap: 20px; }
+    .comparison-value { min-width: 60px; font-size: 12px; }
+
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Tru<span>Mould</span></a>
+  <ul class="nav-links">
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#industries">Industries</a></li>
+    <li><a href="#contact" class="nav-cta">Get Instant Quote</a></li>
+  </ul>
+  <button class="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">On-Demand Manufacturing</div>
+    <h1>Custom Parts.<br>Delivered with <span class="highlight">Certainty.</span></h1>
+    <p class="hero-sub">Instant quoting, precision manufacturing, and guaranteed delivery timelines. From prototype to production — we are the reliability your supply chain has been missing.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Get Instant Quote
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#capabilities" class="btn-secondary">
+        Explore Capabilities
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3>20 Days</h3>
+        <p>Express Mold Delivery</p>
+      </div>
+      <div class="hero-stat">
+        <h3>97.8%</h3>
+        <p>On-Time Delivery Rate</p>
+      </div>
+      <div class="hero-stat">
+        <h3>500+</h3>
+        <p>Molds Delivered</p>
+      </div>
+      <div class="hero-stat">
+        <h3>50%</h3>
+        <p>Cost Savings vs. Legacy</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Precision visual -->
+  <div class="hero-visual">
+    <div class="hero-visual-inner">
+      <div class="precision-crosshair"></div>
+      <div class="precision-ring"></div>
+      <div class="precision-ring"></div>
+      <div class="precision-ring"></div>
+      <div class="precision-center"></div>
+      <span class="dimension-label top">±0.005mm</span>
+      <span class="dimension-label right">ISO 9001</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-label">Trusted by engineering teams at</div>
+  <div class="trust-logos">
+    <span class="trust-logo">Automotive OEMs</span>
+    <span class="trust-logo">Consumer Electronics</span>
+    <span class="trust-logo">Medical Devices</span>
+    <span class="trust-logo">Aerospace</span>
+    <span class="trust-logo">Industrial</span>
+  </div>
+</div>
+
+<!-- CAPABILITIES -->
+<section class="capabilities" id="capabilities">
+  <div class="reveal">
+    <div class="section-eyebrow">Manufacturing Capabilities</div>
+    <h2 class="section-title">Three processes.<br>One reliable partner.</h2>
+    <p class="section-desc">From rapid prototyping to full-scale production. Upload your CAD, get an instant quote, and let us handle the rest.</p>
+  </div>
+
+  <div class="cap-grid reveal">
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3"/></svg>
+      </div>
+      <h3>Injection Molding</h3>
+      <p>Production-grade tooling with Express Mould technology. From T1 samples to full production runs with guaranteed quality at every stage.</p>
+      <div class="cap-specs">
+        <span class="cap-spec">Express 20-Day Molds</span>
+        <span class="cap-spec">100+ Parallel Molds</span>
+        <span class="cap-spec">Multi-Cavity</span>
+      </div>
+    </div>
+
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <h3>CNC Machining</h3>
+      <p>Precision metal and plastic parts with tight tolerances. Multi-axis capabilities for complex geometries, rapid turnaround on prototypes and short runs.</p>
+      <div class="cap-specs">
+        <span class="cap-spec">3, 4 & 5-Axis</span>
+        <span class="cap-spec">±0.005mm Tolerance</span>
+        <span class="cap-spec">50+ Materials</span>
+      </div>
+    </div>
+
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>3D Printing</h3>
+      <p>Functional prototypes and end-use parts across FDM, SLA, and SLS technologies. Accelerate design validation with production-grade additive manufacturing.</p>
+      <div class="cap-specs">
+        <span class="cap-spec">FDM / SLA / SLS</span>
+        <span class="cap-spec">As Fast as 48 Hrs</span>
+        <span class="cap-spec">Design Freedom</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATOR - INDIA POSITIONING -->
+<section class="differentiator" id="why-trumould">
+  <div class="diff-grid">
+    <div class="diff-content reveal">
+      <div class="section-eyebrow">Why TruMould</div>
+      <h2 class="section-title">Resilient supply chains<br>start with better sourcing.</h2>
+      <p class="section-desc">Global supply chains are shifting. Companies need manufacturing partners that combine competitive costs with reliability, transparency, and IP protection — without the geopolitical risk.</p>
+      
+      <div class="diff-advantages">
+        <div class="diff-advantage">
+          <div class="diff-advantage-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h4>IP Protection & Transparency</h4>
+            <p>Robust NDA frameworks, real-time digital dashboards, and full visibility from design to delivery.</p>
+          </div>
+        </div>
+        <div class="diff-advantage">
+          <div class="diff-advantage-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div>
+            <h4>De-risked Supply Chain</h4>
+            <p>Diversify your manufacturing beyond traditional sources. Tariff-advantaged, with direct shipping to the US and Europe.</p>
+          </div>
+        </div>
+        <div class="diff-advantage">
+          <div class="diff-advantage-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <h4>Faster Than You Expect</h4>
+            <p>Express Mould technology cuts production timelines in half. 100 molds in parallel within 3 months — a capability that was previously impossible outside China.</p>
+          </div>
+        </div>
+        <div class="diff-advantage">
+          <div class="diff-advantage-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <h4>Engineering-Led Support</h4>
+            <p>Dedicated engineers for DFM feedback, material selection, and design optimization — not a faceless portal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-visual reveal">
+      <div class="comparison-card">
+        <div class="comparison-header">Sourcing Comparison</div>
+        <div class="comparison-row" style="border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; margin-bottom: 8px;">
+          <div class="comparison-metric" style="font-weight: 600; color: var(--fog);"></div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">
+              <div class="comparison-col-header" style="color: var(--accent);">TruMould</div>
+            </div>
+            <div class="comparison-value other">
+              <div class="comparison-col-header">Traditional</div>
+            </div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Mold Lead Time</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">20 days</div>
+            <div class="comparison-value other">60-90 days</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Quoting Speed</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">Instant</div>
+            <div class="comparison-value other">3-7 days</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Order Tracking</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">Real-time</div>
+            <div class="comparison-value other">Email/Phone</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Parallel Tooling</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">100+</div>
+            <div class="comparison-value other">5-10</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">IP Protection</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">NDA + Digital</div>
+            <div class="comparison-value other">Varies</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Tariff Risk</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">Low</div>
+            <div class="comparison-value other">High</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-metric">Quality Reports</div>
+          <div class="comparison-values">
+            <div class="comparison-value trumould">Dashboard</div>
+            <div class="comparison-value other">PDF/Email</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how-it-works">
+  <div class="reveal">
+    <div class="section-eyebrow">How It Works</div>
+    <h2 class="section-title">From CAD file to delivered parts.</h2>
+    <p class="section-desc">A streamlined digital workflow that takes the guesswork out of custom manufacturing.</p>
+  </div>
+
+  <div class="steps-grid reveal">
+    <div class="step">
+      <div class="step-number">01</div>
+      <h3>Upload & Quote</h3>
+      <p>Upload your 3D CAD file and receive an instant, AI-powered quote with DFM feedback in minutes — not days.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">02</div>
+      <h3>DFM & Optimize</h3>
+      <p>Our engineers review your design, suggest material optimizations, and ensure manufacturability before production begins.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">03</div>
+      <h3>Manufacture</h3>
+      <p>Production kicks off with real-time dashboard visibility. Track every milestone from tooling to T1 samples to final run.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">04</div>
+      <h3>Inspect & Deliver</h3>
+      <p>Rigorous quality inspection at every checkpoint. Parts delivered on time with full documentation and certification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RELIABILITY -->
+<section class="reliability" id="reliability">
+  <div class="reveal">
+    <div class="section-eyebrow">Built on Reliability</div>
+    <h2 class="section-title">Numbers that build trust.</h2>
+    <p class="section-desc">We measure everything so you don't have to worry about anything.</p>
+  </div>
+
+  <div class="reliability-grid reveal">
+    <div class="rel-card">
+      <div class="rel-number">97.8%</div>
+      <div class="rel-label">On-Time<br>Delivery Rate</div>
+    </div>
+    <div class="rel-card">
+      <div class="rel-number">20</div>
+      <div class="rel-label">Day Express<br>Mold Delivery</div>
+    </div>
+    <div class="rel-card">
+      <div class="rel-number">100+</div>
+      <div class="rel-label">Molds Managed<br>In Parallel</div>
+    </div>
+    <div class="rel-card">
+      <div class="rel-number">24/7</div>
+      <div class="rel-label">Order Tracking<br>Dashboard</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section class="platform" id="platform">
+  <div class="platform-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Digital Platform</div>
+      <h2 class="section-title">Full visibility,<br>zero surprises.</h2>
+      <p class="section-desc" style="margin-bottom: 40px;">Your custom order dashboard gives you complete control and transparency across every project, from quote to delivery.</p>
+      
+      <div class="platform-features">
+        <div class="platform-feature">
+          <div class="platform-feature-dot"></div>
+          <div>
+            <h4>Real-Time Order Tracking</h4>
+            <p>Live status updates on tooling, sampling, production, and shipping milestones.</p>
+          </div>
+        </div>
+        <div class="platform-feature">
+          <div class="platform-feature-dot"></div>
+          <div>
+            <h4>Quality Documentation</h4>
+            <p>Inspection reports, material certificates, and hardness reports — all accessible in your dashboard.</p>
+          </div>
+        </div>
+        <div class="platform-feature">
+          <div class="platform-feature-dot"></div>
+          <div>
+            <h4>Instant DFM Feedback</h4>
+            <p>AI-powered manufacturability analysis on every uploaded part, with engineering support on complex designs.</p>
+          </div>
+        </div>
+        <div class="platform-feature">
+          <div class="platform-feature-dot"></div>
+          <div>
+            <h4>Multi-Project Management</h4>
+            <p>Manage all your orders, quotes, and communications in one centralized workspace.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="platform-mock">
+        <div class="mock-titlebar">
+          <div class="mock-dot"></div>
+          <div class="mock-dot"></div>
+          <div class="mock-dot"></div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-header">
+            <h5>Active Orders</h5>
+            <span class="mock-badge">3 IN PRODUCTION</span>
+          </div>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Process</th>
+                <th>Status</th>
+                <th>ETA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Housing-Assembly-v4</td>
+                <td>Injection Mold</td>
+                <td><span class="mock-status"><span class="mock-status-dot green"></span>T1 Approved</span></td>
+                <td>Mar 8</td>
+              </tr>
+              <tr>
+                <td>Bracket-Mount-R2</td>
+                <td>CNC Machining</td>
+                <td><span class="mock-status"><span class="mock-status-dot yellow"></span>In Production</span></td>
+                <td>Feb 28</td>
+              </tr>
+              <tr>
+                <td>Sensor-Cover-Proto</td>
+                <td>3D Print (SLA)</td>
+                <td><span class="mock-status"><span class="mock-status-dot blue"></span>Shipping</span></td>
+                <td>Feb 24</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mock-progress"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="mock-progress-label" style="text-align: left;">Overall Pipeline Progress</div>
+            <div class="mock-progress-label">72%</div>
+          </div>
+          <div class="mock-progress">
+            <div class="mock-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="industries" id="industries">
+  <div class="reveal">
+    <div class="section-eyebrow">Industries We Serve</div>
+    <h2 class="section-title">Precision parts for<br>critical applications.</h2>
+    <p class="section-desc">From automotive OEMs to medical devices, we understand the quality standards your industry demands.</p>
+  </div>
+
+  <div class="industries-tags reveal">
+    <span class="industry-tag">Automotive</span>
+    <span class="industry-tag">Medical Devices</span>
+    <span class="industry-tag">Consumer Electronics</span>
+    <span class="industry-tag">Aerospace & Defense</span>
+    <span class="industry-tag">Industrial Equipment</span>
+    <span class="industry-tag">Consumer Goods</span>
+    <span class="industry-tag">Robotics</span>
+    <span class="industry-tag">Telecommunications</span>
+    <span class="industry-tag">Energy & Cleantech</span>
+    <span class="industry-tag">Packaging</span>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="reveal">
+    <div class="section-eyebrow">What Our Clients Say</div>
+    <h2 class="section-title">Trusted by engineers<br>who can't afford delays.</h2>
+  </div>
+
+  <div class="testimonials-grid reveal">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="testimonial-text">"Despite our doubts, we took a leap of faith with an Indian manufacturer. Today we are glad that we made the right decision with TruMould. Quality, communication, and on-time delivery — all exceeded expectations."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">VP</div>
+        <div>
+          <div class="testimonial-name">VP of Engineering</div>
+          <div class="testimonial-role">Consumer Electronics Company, USA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="testimonial-text">"The success of a new product company relies on getting good vendors. We were skeptical to give the project to a company we didn't know. After the first project, we were happy with the quality and their commitment."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">FK</div>
+        <div>
+          <div class="testimonial-name">Founder</div>
+          <div class="testimonial-role">Hardware Startup, USA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="reveal">
+    <div class="section-eyebrow" style="justify-content: center;">Get Started</div>
+    <h2 class="section-title">Ready to build with<br><span style="background: linear-gradient(135deg, var(--accent), #00f5c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">certainty?</span></h2>
+    <p class="section-desc">Upload your CAD file and get an instant quote. Or talk to our engineering team about your next project.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary">
+        Get Instant Quote
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-outline">Talk to Engineering</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="font-size: 22px;">Tru<span>Mould</span></a>
+      <p>On-demand custom manufacturing platform. Injection molding, CNC machining, and 3D printing — delivered with certainty from India to the world.</p>
+      <div class="footer-contact">
+        <a href="mailto:info@trumould.com">info@trumould.com</a>
+        <a href="tel:+17205197806">+1 (720) 519-7806</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Capabilities</h4>
+      <a href="#">Injection Molding</a>
+      <a href="#">CNC Machining</a>
+      <a href="#">3D Printing</a>
+      <a href="#">Contract Manufacturing</a>
+      <a href="#">Mold Design</a>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="#">Get Instant Quote</a>
+      <a href="#">Order Dashboard</a>
+      <a href="#">Materials Library</a>
+      <a href="#">DFM Feedback</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About TruMould</a>
+      <a href="#">Careers</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 TruMould. All rights reserved.</p>
+    <div class="footer-certifications">
+      <span class="footer-cert">ISO 9001</span>
+      <span class="footer-cert">ISO 14001</span>
+      <span class="footer-cert">IATF 16949</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Counter animation for reliability numbers
+  function animateCounters() {
+    const counters = document.querySelectorAll('.rel-number');
+    counters.forEach(counter => {
+      const text = counter.textContent;
+      if (counter.dataset.animated) return;
+      
+      const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+      const suffix = text.replace(/[0-9.]/g, '');
+      const duration = 1500;
+      const start = performance.now();
+      
+      counter.dataset.animated = 'true';
+      
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        
+        let current;
+        if (text.includes('.')) {
+          current = (num * eased).toFixed(1);
+        } else {
+          current = Math.floor(num * eased);
+        }
+        
+        counter.textContent = current + suffix;
+        
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      
+      requestAnimationFrame(update);
+    });
+  }
+
+  const relSection = document.querySelector('.reliability');
+  const relObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      setTimeout(animateCounters, 300);
+      relObserver.disconnect();
+    }
+  }, { threshold: 0.3 });
+  
+  relObserver.observe(relSection);
+
+  // Mobile menu toggle
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', () => {
+      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+      if (navLinks.style.display === 'flex') {
+        navLinks.style.position = 'fixed';
+        navLinks.style.top = '60px';
+        navLinks.style.left = '0';
+        navLinks.style.right = '0';
+        navLinks.style.background = 'rgba(10,10,10,0.98)';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.padding = '24px';
+        navLinks.style.gap = '20px';
+        navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
